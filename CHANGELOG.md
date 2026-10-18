@@ -1,3 +1,8 @@
+## 1.0.1
+
+- Settings button removed from the page (Hostwerk shows it in the header), clearer summary line, reacts to language changes.
+- Einstellungen-Knopf aus der Seite entfernt (Hostwerk zeigt ihn oben), klarere Zusammenfassung, reagiert auf Sprachwechsel.
+
 ## 1.0.0
 
 - First release for Hostwerk SDK 2: page, dashboard tile, settings, German and English.
