@@ -1,8 +1,8 @@
-name: Check & release
+name: Check, test & release
 
-# Same rules as the Hostwerk catalog: manifest, security, design and translations (sdk/check.js --strict).
-# A tag v1.2.3 (matching "version" in manifest.json) builds <id>-<version>.zip with a SHA-256 file as a GitHub release –
-# the Hostwerk catalog picks up new releases automatically.
+# Same rules as the Hostwerk catalog: manifest, security, design and translations (sdk/check.js --strict),
+# plus the unit tests of the extension's logic (node --test). A tag v1.2.3 (matching "version" in manifest.json)
+# builds <id>-<version>.zip with a SHA-256 file as a GitHub release – the Hostwerk catalog picks it up automatically.
 on:
   push:
     branches: [main]
@@ -25,6 +25,8 @@ jobs:
         run: |
           curl -fsSL https://raw.githubusercontent.com/Passimoritz/hostwerk-public/main/sdk/check.js -o "$RUNNER_TEMP/check.js"
           node "$RUNNER_TEMP/check.js" . --strict
+      - name: Unit tests
+        run: node --test tests/*.test.js
       - name: Build package
         if: startsWith(github.ref, 'refs/tags/v')
         run: |

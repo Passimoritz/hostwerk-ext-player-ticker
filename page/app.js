@@ -12,9 +12,9 @@ async function ranking(server, size) {
   if (!size || server.state !== 'running') return '';
   try {
     const st = await Hostwerk.minecraft.stats(server.id);
-    const top = (st.players || []).slice().sort((a, b) => (b.playtime || 0) - (a.playtime || 0)).slice(0, size);
+    const top = Ticker.topPlayers(st, size);
     if (!top.length) return '';
-    return html`<ol class="ranking">${top.map((p) => html`<li><img class="hw-avatar" src="${head(p.name)}" alt=""><span class="hw-grow">${p.name}</span><span class="hw-muted hw-small">${Hostwerk.fmt.duration(p.playtime || 0)}</span></li>`)}</ol>`;
+    return html`<ol class="ranking">${top.map((p) => html`<li><img class="hw-avatar" src="${head(p.name)}" alt=""><span class="hw-grow">${p.name}</span><span class="hw-muted hw-small">${Hostwerk.fmt.duration(p.playMs)}</span></li>`)}</ol>`;
   } catch { return ''; }
 }
 
@@ -22,8 +22,8 @@ async function load() {
   const settings = await Hostwerk.settings.get();
   let servers = await Hostwerk.minecraft.servers();
   if (!settings.showOffline) servers = servers.filter((s) => s.state === 'running');
-  servers.sort((a, b) => (b.id === pinned) - (a.id === pinned) || (b.state === 'running') - (a.state === 'running') || a.name.localeCompare(b.name));
-  const online = servers.reduce((n, s) => n + (s.extra.players || []).length, 0);
+  servers = Ticker.sortServers(servers, pinned);
+  const online = Ticker.onlineCount(servers);
   document.getElementById('sub').textContent = t('summary', { players: online, servers: servers.filter((s) => s.state === 'running').length, time: Hostwerk.fmt.time(Date.now()) });
   if (!servers.length) return Hostwerk.render('#list', html`<div class="hw-card hw-empty"><b>${t('noServers')}</b>${t('noServersHint')}</div>`);
   const cards = await Promise.all(servers.map(async (s) => {
