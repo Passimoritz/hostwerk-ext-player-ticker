@@ -11,7 +11,7 @@
   </style>
 </head>
 <body>
-  <div class="hw-stat"><div class="hw-k" data-i18n="widgetTitle"></div><div class="big" id="count">–</div></div>
+  <div class="stat"><div class="k" data-i18n="widgetTitle"></div><div class="big" id="count">–</div></div>
   <div class="heads" id="heads"></div>
   <div id="servers"></div>
   <script>
@@ -22,8 +22,8 @@
       document.getElementById('count').textContent = t('playersOnline', { n: names.length });
       Hostwerk.render('#heads', html`${names.slice(0, 16).map((n) => html`<img class="hw-avatar" title="${n}" src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/40" alt="">`)}`);
       Hostwerk.render('#servers', servers.length
-        ? html`${servers.map((s) => html`<div class="row"><span class="hw-ellipsis">${s.name}</span><span class="hw-muted">${(s.extra.players || []).length}</span></div>`)}`
-        : html`<div class="hw-muted hw-small">${t('noRunning')}</div>`);
+        ? html`${servers.map((s) => html`<div class="row"><span class="ellipsis">${s.name}</span><span class="muted">${(s.extra.players || []).length}</span></div>`)}`
+        : html`<div class="muted small">${t('noRunning')}</div>`);
     }
     Hostwerk.ready().then(() => { load(); Hostwerk.on('minecraft', load); Hostwerk.on('service', load); setInterval(load, 15000); });
   </script>

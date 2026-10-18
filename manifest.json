@@ -9,7 +9,7 @@
     "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS und Spielzeit-Rangliste – schön für Streams und Discord-Bildschirme.",
     "en": "Who is on your Minecraft servers right now? Live list with heads, TPS and a playtime ranking – great for streams and Discord screens."
   },
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
   "license": "MIT",
@@ -27,7 +27,11 @@
       "en": "Player Ticker"
     },
     "icon": "users",
-    "file": "page/index.html"
+    "file": "page/index.html",
+    "description": {
+      "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS und Spielzeit-Rangliste – schön für Streams und Discord-Bildschirme.",
+      "en": "Who is on your Minecraft servers right now? Live list with heads, TPS and a playtime ranking – great for streams and Discord screens."
+    }
   },
   "widget": {
     "title": {
