@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ext-sdk.js"></script>
+  <style>
+    .server-head { display: flex; align-items: center; gap: 10px; }
+    .server-head b { font-size: 16px; }
+    .players { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .pinned { border-color: color-mix(in srgb, var(--hw-accent) 55%, var(--hw-line)); }
+    .ranking { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: rank; }
+    .ranking li { counter-increment: rank; display: flex; gap: 8px; align-items: center; padding: 5px 0; color: var(--hw-text-2); }
+    .ranking li::before { content: counter(rank); width: 20px; height: 20px; border-radius: 6px; display: inline-grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--hw-surface-3); color: var(--hw-text); }
+    .pin { margin-left: auto; }
+  </style>
+</head>
+<body>
+  <div class="hw-row">
+    <div class="hw-grow"><h1 data-i18n="title"></h1><p class="hw-sub" id="sub" data-i18n="loading"></p></div>
+  </div>
+  <div id="list" class="hw-stack"><div class="hw-skeleton" style="height:110px"></div><div class="hw-skeleton" style="height:110px"></div></div>
+  <script src="app.js"></script>
+</body>
+</html>

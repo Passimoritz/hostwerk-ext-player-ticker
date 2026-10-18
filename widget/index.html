@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ext-sdk.js"></script>
+  <style>
+    .big { font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+    .heads { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .row { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="hw-stat"><div class="hw-k" data-i18n="widgetTitle"></div><div class="big" id="count">–</div></div>
+  <div class="heads" id="heads"></div>
+  <div id="servers"></div>
+  <script>
+    const { html, t } = Hostwerk;
+    async function load() {
+      const servers = (await Hostwerk.minecraft.servers()).filter((s) => s.state === 'running');
+      const names = servers.flatMap((s) => s.extra.players || []);
+      document.getElementById('count').textContent = t('playersOnline', { n: names.length });
+      Hostwerk.render('#heads', html`${names.slice(0, 16).map((n) => html`<img class="hw-avatar" title="${n}" src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/40" alt="">`)}`);
+      Hostwerk.render('#servers', servers.length
+        ? html`${servers.map((s) => html`<div class="row"><span class="hw-ellipsis">${s.name}</span><span class="hw-muted">${(s.extra.players || []).length}</span></div>`)}`
+        : html`<div class="hw-muted hw-small">${t('noRunning')}</div>`);
+    }
+    Hostwerk.ready().then(() => { load(); Hostwerk.on('minecraft', load); Hostwerk.on('service', load); setInterval(load, 15000); });
+  </script>
+</body>
+</html>

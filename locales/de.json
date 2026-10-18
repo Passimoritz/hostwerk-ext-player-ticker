@@ -1,0 +1,19 @@
+{
+  "title": "Spieler-Ticker",
+  "loading": "Lade …",
+  "settings": "Einstellungen",
+  "summary": "Spieler online: {players} · Server aktiv: {servers} · Stand {time}",
+  "running": "läuft",
+  "tps": "{tps} TPS",
+  "offline": "offline",
+  "offlineHint": "Server ist gestoppt",
+  "nobody": "Gerade niemand online",
+  "pin": "Oben anheften",
+  "unpin": "Nicht mehr anheften",
+  "noServers": "Noch kein Minecraft-Server",
+  "noServersHint": "Lege in Hostwerk unter Minecraft einen Server an – er erscheint hier sofort.",
+  "error": "Konnte nicht laden",
+  "widgetTitle": "Spieler online",
+  "playersOnline": "{n} online",
+  "noRunning": "Kein Server läuft"
+}

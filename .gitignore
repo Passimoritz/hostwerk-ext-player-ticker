@@ -1,0 +1,4 @@
+*.zip
+*.zip.sha256
+node_modules/
+.DS_Store

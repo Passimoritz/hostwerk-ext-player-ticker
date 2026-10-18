@@ -1,0 +1,19 @@
+{
+  "title": "Player Ticker",
+  "loading": "Loading …",
+  "settings": "Settings",
+  "summary": "Players online: {players} · Servers up: {servers} · as of {time}",
+  "running": "running",
+  "tps": "{tps} TPS",
+  "offline": "offline",
+  "offlineHint": "Server is stopped",
+  "nobody": "Nobody online right now",
+  "pin": "Pin to top",
+  "unpin": "Unpin",
+  "noServers": "No Minecraft server yet",
+  "noServersHint": "Create a server in Hostwerk under Minecraft – it shows up here right away.",
+  "error": "Could not load",
+  "widgetTitle": "Players online",
+  "playersOnline": "{n} online",
+  "noRunning": "No server running"
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Passimoritz/hostwerk-public/main/sdk/manifest.schema.json",
+  "id": "player-ticker",
+  "name": { "de": "Spieler-Ticker", "en": "Player Ticker" },
+  "description": {
+    "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS und Spielzeit-Rangliste – schön für Streams und Discord-Bildschirme.",
+    "en": "Who is on your Minecraft servers right now? Live list with heads, TPS and a playtime ranking – great for streams and Discord screens."
+  },
+  "version": "1.0.0",
+  "author": "Hostwerk",
+  "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
+  "license": "MIT",
+  "icon": "icon.svg",
+  "color": "#23964a",
+  "hostwerk": ">=2.9.0",
+  "permissions": ["read:services", "read:minecraft", "storage"],
+  "page": { "title": { "de": "Spieler-Ticker", "en": "Player Ticker" }, "icon": "users", "file": "page/index.html" },
+  "widget": { "title": { "de": "Spieler online", "en": "Players online" }, "file": "widget/index.html", "size": "third" },
+  "settings": [
+    { "key": "showOffline", "type": "switch", "label": { "de": "Gestoppte Server zeigen", "en": "Show stopped servers" }, "default": true },
+    { "key": "ranking", "type": "select", "label": { "de": "Rangliste", "en": "Ranking" }, "default": 3,
+      "options": [
+        { "value": 0, "label": { "de": "Aus", "en": "Off" } },
+        { "value": 3, "label": { "de": "Top 3", "en": "Top 3" } },
+        { "value": 5, "label": { "de": "Top 5", "en": "Top 5" } },
+        { "value": 10, "label": { "de": "Top 10", "en": "Top 10" } }
+      ] },
+    { "key": "refresh", "type": "number", "label": { "de": "Aktualisieren alle … Sekunden", "en": "Refresh every … seconds" }, "default": 10, "min": 3, "max": 120 }
+  ]
+}
