@@ -1,3 +1,5 @@
+![Player Ticker](banner.svg)
+
 # Player Ticker
 
 **English** · [Deutsch](README.de.md)
