@@ -24,15 +24,26 @@
     .stream-player img { width: 40px; height: 40px; border-radius: var(--r-sm); image-rendering: pixelated; }
     .hw-avatar { image-rendering: pixelated; }
     .obs-card { margin-bottom: var(--sp-4); }
+    /* 1.5: Suche, Filter für Kommen und Gehen, Reiter „Webseite“, Abschnitt im Reiter „Spieler“ */
+    .tools { margin-bottom: var(--sp-3); }
+    .search { min-width: 180px; max-width: 260px; }
+    .events-filter { margin-bottom: var(--sp-2); gap: var(--sp-2); }
+    .events-filter .select { width: auto; }
+    .site-row { gap: var(--sp-2); }
+    .site-color { width: 48px; height: var(--control-h); padding: 0; border: 1px solid var(--line); border-radius: var(--r-sm); background: none; }
+    body.section { padding: var(--sp-2) var(--sp-4) var(--sp-3); }
+    body.section .card { box-shadow: none; }
   </style>
 </head>
 <body>
   <p class="muted" id="sub" data-i18n="loading"></p>
-  <section data-tab="live"><div id="list" class="stack"><div class="hw-skeleton" style="height:110px"></div><div class="hw-skeleton" style="height:110px"></div></div></section>
+  <section data-tab="live"><div class="row-tight tools"><input class="input search" id="search" type="search" placeholder="Search player …" data-i18n-placeholder="searchPlayer" aria-label="Search player"></div><div id="list" class="stack"><div class="hw-skeleton" style="height:110px"></div><div class="hw-skeleton" style="height:110px"></div></div></section>
   <section data-tab="events" hidden><div class="card card-pad" id="events"></div></section>
   <section data-tab="stream" hidden><div id="stream"></div></section>
+  <section data-tab="site" hidden><div id="site"><div class="hw-skeleton" style="height:110px"></div></div></section>
   <script src="live.js"></script>
   <script src="lib.js"></script>
+  <script src="site.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

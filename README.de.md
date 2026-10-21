@@ -10,6 +10,9 @@ Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen,
 
 ## Funktionen
 
+- **Gleich dort, wo man ihn braucht:** Abschnitt im Reiter „Spieler“ jedes Minecraft-Servers (Hostwerk mit SDK 3.2) – wer auf diesem Server ist, Höchststand heute und das letzte Kommen und Gehen, ohne eigenen Reiter
+- **Spielersuche**, **Höchststand heute** je Server, Kommen und Gehen **nach Server gefiltert**
+- **Als Webseite bereitstellen** (Reiter „Webseite“, Hostwerk mit SDK 3.2): Hostwerk legt eine eigene Seite „Wer ist online?“ (HTML + JSON) in einen Unterordner eines deiner Webserver und erneuert sie im gewählten Takt – Überschrift, Akzentfarbe, hell/dunkel/wie das System, Sprache, alle oder ein Server, gestoppte Server ja/nein und **Spielernamen wie im Spiel, gekürzt oder nur Zahlen**. Keine Adressen oder IDs; Besucher brauchen keine Hostwerk-Anmeldung. Webserver zeigen diese Seiten unter „Seiten von Erweiterungen“.
 - Live-Spielerliste mit Köpfen – aktualisiert sich, sobald jemand kommt oder geht
 - Köpfe werden aus dem Namen selbst gezeichnet (geht offline, kein Spielername verlässt den Rechner); echte Skin-Köpfe von mc-heads.net nur, wenn du es in den Einstellungen einschaltest – antwortet der Dienst nicht, erscheint der gezeichnete Kopf
 - Reiter „Kommen und Gehen“ mit Uhrzeit – wer in den letzten 24 Stunden gegangen ist, während die Seite zu war, weiß Hostwerk auch

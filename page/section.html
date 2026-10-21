@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ext-sdk.js"></script>
+  <style>
+    .server-head { display: flex; align-items: center; gap: var(--sp-2); }
+    .server-head b { font-size: var(--fs-lg); }
+    .players { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
+    .pinned { border-color: var(--accent); }
+    .ranking { margin: var(--sp-3) 0 0; padding: 0; list-style: none; counter-reset: rank; }
+    .ranking li { counter-increment: rank; display: flex; gap: var(--sp-2); align-items: center; padding: var(--sp-1) 0; color: var(--text-2); }
+    .ranking li::before { content: counter(rank); width: 20px; height: 20px; border-radius: var(--r-sm); display: inline-grid; place-items: center; font-size: var(--fs-2xs); font-weight: 700; background: var(--surface-3); color: var(--text); }
+    .pin { margin-left: auto; }
+    .events { list-style: none; margin: 0; padding: 0; }
+    .events li { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto minmax(0, 8em); gap: var(--sp-2); align-items: center; padding: var(--sp-1) 0; border-bottom: 1px solid var(--line); }
+    /* Stream-Ansicht: durchsichtig, große Schrift – für die Fensteraufnahme in OBS */
+    body.stream { background: transparent; }
+    body.stream #sub { display: none; }
+    .stream-count { font-size: var(--fs-3xl); font-weight: 700; margin-bottom: var(--sp-4); }
+    .stream-list { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+    .stream-player { display: flex; align-items: center; gap: var(--sp-3); font-size: var(--fs-2xl); font-weight: 600; }
+    .stream-player img { width: 40px; height: 40px; border-radius: var(--r-sm); image-rendering: pixelated; }
+    .hw-avatar { image-rendering: pixelated; }
+    .obs-card { margin-bottom: var(--sp-4); }
+    /* 1.5: Suche, Filter für Kommen und Gehen, Reiter „Webseite“, Abschnitt im Reiter „Spieler“ */
+    .tools { margin-bottom: var(--sp-3); }
+    .search { min-width: 180px; max-width: 260px; }
+    .events-filter { margin-bottom: var(--sp-2); gap: var(--sp-2); }
+    .events-filter .select { width: auto; }
+    .site-row { gap: var(--sp-2); }
+    .site-color { width: 48px; height: var(--control-h); padding: 0; border: 1px solid var(--line); border-radius: var(--r-sm); background: none; }
+    body.section { padding: var(--sp-2) var(--sp-4) var(--sp-3); }
+    body.section .card { box-shadow: none; }
+  </style>
+</head>
+<body class="section">
+  <!-- Abschnitt im Reiter „Spieler“ eines Minecraft-Servers (Hostwerk 3.2+): wer gerade da ist, Höchststand heute, Kommen und Gehen -->
+  <section data-tab="live"><div class="row-tight tools"><input class="input search" id="search" type="search" placeholder="Search player …" data-i18n-placeholder="searchPlayer" aria-label="Search player"></div><div id="list" class="stack"><div class="hw-skeleton" style="height:90px"></div></div></section>
+  <section data-tab="events"><h4 class="small muted" data-i18n="eventsTitle">Joins and leaves</h4><div id="events"></div></section>
+  <p class="tiny muted"><button type="button" class="btn sm ghost" data-open-page data-i18n="openAll">All servers and stream view</button></p>
+  <script src="live.js"></script>
+  <script src="lib.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

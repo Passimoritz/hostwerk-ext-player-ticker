@@ -6,10 +6,10 @@
     "en": "Player Ticker"
   },
   "description": {
-    "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht und eigener Adresse für OBS.",
-    "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view and its own address for OBS."
+    "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielersuche, Höchststand des Tages, Spielzeit-Rangliste und Kommen und Gehen – direkt im Reiter „Spieler“ jedes Minecraft-Servers, mit Stream-Ansicht für OBS und auf Wunsch als eigene Webseite in deinem Webserver.",
+    "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, player search, today’s peak, a playtime ranking and who joined or left – right in the “Players” tab of every Minecraft server, with a stream view for OBS and, if you like, as an own web page in your web server."
   },
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
   "license": "MIT",
@@ -43,8 +43,8 @@
     "icon": "users",
     "file": "page/index.html",
     "description": {
-      "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht und eigener Adresse für OBS.",
-      "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view and its own address for OBS."
+      "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielersuche, Höchststand des Tages, Spielzeit-Rangliste und Kommen und Gehen – direkt im Reiter „Spieler“ jedes Minecraft-Servers, mit Stream-Ansicht für OBS und auf Wunsch als eigene Webseite in deinem Webserver.",
+      "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, player search, today’s peak, a playtime ranking and who joined or left – right in the “Players” tab of every Minecraft server, with a stream view for OBS and, if you like, as an own web page in your web server."
     },
     "nav": {
       "group": "server",
@@ -75,6 +75,14 @@
           "en": "Stream view"
         },
         "icon": "tv"
+      },
+      {
+        "id": "site",
+        "title": {
+          "de": "Webseite",
+          "en": "Web page"
+        },
+        "icon": "globe"
       }
     ]
   },
@@ -169,6 +177,21 @@
   "allowExtensions": {
     "*": [
       "tabs"
+    ]
+  },
+  "contributes": {
+    "sections": [
+      {
+        "id": "online",
+        "title": {
+          "de": "Gerade online",
+          "en": "Online now"
+        },
+        "icon": "users",
+        "on": "mc.players",
+        "file": "page/section.html",
+        "height": 620
+      }
     ]
   }
 }

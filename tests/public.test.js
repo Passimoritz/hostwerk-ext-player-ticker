@@ -43,7 +43,7 @@ function fakeHost({ sandboxed = false, settings = {} } = {}) {
     sandboxed,
     id: 'player-ticker',
     publicRouter: { get: (p, fn) => { routes[p] = fn; } },
-    router: { get() {}, post() {} },
+    router: { get() {}, post() {}, delete() {} },
   };
   if (sandboxed) { host.api = async (m, p) => answer(p); host.settings = async () => settings; } else {
     host.ctx = { audit: { selfCall: async (m, p) => answer(p) }, games: { allPlayers: async () => { seen.push('ctx.games'); return GAMES; } }, extMarket: { settingsFor: () => settings } };

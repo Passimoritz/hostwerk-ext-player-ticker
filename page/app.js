@@ -1,6 +1,8 @@
 // Player Ticker – page. Everything visible goes through Hostwerk.html (escaped) and Hostwerk.t (German/English).
 // Heads are drawn locally from the name; mc-heads.net only when the user switches it on (setting "remoteHeads").
 // Game servers (extension "Game servers", permission read:games) appear next to Minecraft – players through the Steam query.
+// 1.5: player search, today's peak per server, join/leave filtered by server, a section in the "Players" tab of every
+// Minecraft server (Hostwerk with SDK 3.2, page/section.html – only that server) and the tab "Web page" (page/site.js).
 const { html, t } = Hostwerk;
 const T = Ticker;
 const STATS_TTL = 60000; // ranking stats per server at most once a minute (not on every refresh tick)
@@ -12,6 +14,11 @@ let events = [];
 const cache = new Map(); // server → { at, data }
 let poll = null;
 let allServers = []; // all servers incl. stopped (names for the join/leave list)
+let query = ''; // player search
+let eventServer = ''; // join/leave: only this server
+let peaks = { day: '', max: {} }; // today's highest number of players per server
+const inSection = () => Hostwerk.embed === 'section';
+const sectionServer = () => (inSection() && Hostwerk.context && Hostwerk.context.kind === 'minecraft' ? Hostwerk.context.id : null);
 
 const head = (name, size = 52) => T.headUrl(name, { remote: !!settings.remoteHeads, size });
 const avatar = (name, size) => html`<img class="hw-avatar" src="${head(name, size)}" data-name="${name}" alt="" width="20" height="20">`;
@@ -38,21 +45,28 @@ function ranking(stats, size) {
 }
 
 function card(s, stats, size) {
-  const players = s.extra.players || [];
+  const players = T.filterNames(s.extra.players || [], query);
+  const peak = peaks.max[s.id];
   const isPinned = s.id === pinned;
   return html`<div class="card card-pad ${isPinned ? 'pinned' : ''}">
     <div class="server-head"><span class="dot ${s.state === 'running' ? 'ok' : ''}"></span><b class="ellipsis">${s.name}</b>${stateBadge(s)}
       <button type="button" class="btn sm ghost pin" data-pin="${s.id}" aria-pressed="${isPinned ? 'true' : 'false'}" aria-label="${t(isPinned ? 'unpinName' : 'pinName', { name: s.name })}" title="${t(isPinned ? 'unpin' : 'pin')}">${isPinned ? '★' : '☆'}</button></div>
-    <div class="players">${players.length ? players.map((n) => html`<span class="pill">${avatar(n)}${n}${bedrock(n)}</span>`) : html`<span class="muted small">${t(s.state === 'running' ? 'nobody' : 'offlineHint')}</span>`}</div>
+    <div class="players">${players.length ? players.map((n) => html`<span class="pill">${avatar(n)}${n}${bedrock(n)}</span>`) : html`<span class="muted small">${t(query && (s.extra.players || []).length ? 'noMatch' : s.state === 'running' ? 'nobody' : 'offlineHint')}</span>`}</div>
+    ${peak ? html`<div class="tiny muted">${t('peakToday', { n: Hostwerk.fmt.number(peak) })}</div>` : ''}
     ${size && s.state === 'running' ? ranking(stats, size) : ''}
   </div>`;
 }
 
-function drawEvents() {
+function drawEvents(into = '#events', max = 30) {
   const names = new Map(allServers.map((s) => [s.id, s.name]));
-  Hostwerk.render('#events', events.length
-    ? html`<ul class="events">${events.slice(0, 30).map((e) => html`<li><span class="mono small muted">${clock(e.t)}</span>${avatar(e.name)}<b class="ellipsis">${e.name}</b><span class="small ${e.kind === 'join' ? 'c-ok' : 'muted'}">${t(e.kind === 'join' ? 'joined' : 'left')}</span><span class="tiny muted ellipsis">${names.get(e.server) || ''}</span></li>`)}</ul>`
-    : html`<p class="muted small">${t('noEvents')}</p>`);
+  const only = sectionServer() || eventServer;
+  const list = T.filterEvents(events, { server: only, query });
+  const picker = !inSection() && allServers.length > 1 ? html`<div class="row-tight events-filter"><label class="label" for="ev-server">${t('eventsServer')}</label><select class="select" id="ev-server"><option value="">${t('allServers')}</option>${allServers.map((x) => html`<option value="${x.id}" ${x.id === eventServer ? Hostwerk.raw('selected') : ''}>${x.name}</option>`)}</select></div>` : '';
+  Hostwerk.render(into, list.length
+    ? html`${picker}<ul class="events">${list.slice(0, max).map((e) => html`<li><span class="mono small muted">${clock(e.t)}</span>${avatar(e.name)}<b class="ellipsis">${e.name}</b><span class="small ${e.kind === 'join' ? 'c-ok' : 'muted'}">${t(e.kind === 'join' ? 'joined' : 'left')}</span><span class="tiny muted ellipsis">${names.get(e.server) || ''}</span></li>`)}</ul>`
+    : html`${picker}<p class="muted small">${t('noEvents')}</p>`);
+  const sel = document.getElementById('ev-server');
+  if (sel) sel.onchange = () => { eventServer = sel.value; drawEvents(); };
 }
 
 async function load() {
@@ -66,7 +80,11 @@ async function load() {
   last = now;
   if (fresh.length) { events = T.journal(events, fresh); Hostwerk.storage.set('events', events).catch(() => {}); }
   allServers = servers;
-  if (!settings.showOffline) servers = servers.filter((s) => s.state === 'running');
+  // Höchststand heute je Server (für die Karte) – im eigenen Speicher, ein Tag
+  const nextPeaks = T.peaks(peaks, servers);
+  if (nextPeaks !== peaks) { peaks = nextPeaks; Hostwerk.storage.set('peaks', peaks).catch(() => {}); }
+  if (sectionServer()) servers = servers.filter((s) => s.id === sectionServer());
+  else if (!settings.showOffline) servers = servers.filter((s) => s.state === 'running');
   servers = T.sortServers(servers, pinned);
   const size = Number(settings.ranking) || 0;
   const stats = {};
@@ -75,6 +93,7 @@ async function load() {
   const seen = Object.entries(stats).flatMap(([id, st]) => T.leavesFromStats(id, st));
   if (seen.length) { const merged = T.journal(events, seen); if (merged.length !== events.length) { events = merged; Hostwerk.storage.set('events', events).catch(() => {}); } }
   const online = T.onlineCount(servers);
+  if (inSection()) { Hostwerk.render('#list', html`${servers.map((s) => card(s, stats[s.id], size))}`); drawEvents('#events', 6); return undefined; }
   document.getElementById('sub').textContent = t('summary', { players: Hostwerk.fmt.number(online), servers: Hostwerk.fmt.number(servers.filter((s) => s.state === 'running').length), time: clock(Date.now()) });
   if (tab === 'stream') return drawStream(servers);
   if (tab === 'events') return drawEvents();
@@ -100,13 +119,14 @@ function obsCard() {
   </div>`;
 }
 
-const target = () => (tab === 'stream' ? '#stream' : tab === 'events' ? '#events' : '#list');
-const reload = () => Live.guard(Hostwerk, target(), load);
+const target = () => (tab === 'stream' ? '#stream' : tab === 'events' ? '#events' : tab === 'site' ? '#site' : '#list');
+const reload = () => (tab === 'site' ? Promise.resolve() : Live.guard(Hostwerk, target(), load));
 
 function showTab(id) {
-  tab = ['stream', 'events'].includes(id) ? id : 'live';
-  for (const el of document.querySelectorAll('[data-tab]')) el.hidden = el.dataset.tab !== tab;
+  tab = ['stream', 'events', 'site'].includes(id) ? id : 'live';
+  for (const el of document.querySelectorAll('[data-tab]')) el.hidden = inSection() ? false : el.dataset.tab !== tab;
   document.body.classList.toggle('stream', tab === 'stream');
+  if (tab === 'site') { if (window.TickerSite) window.TickerSite.show(); return; }
   reload();
 }
 
@@ -118,6 +138,7 @@ function schedule() {
 document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-copy-url]')) { Hostwerk.copy(publicUrl()).catch(() => {}); return; }
   if (e.target.closest('[data-open-settings]')) { Hostwerk.settings.open().catch(() => {}); return; }
+  if (e.target.closest('[data-open-page]')) { Hostwerk.navigate('/ext/player-ticker').catch(() => {}); return; }
   const b = e.target.closest('[data-pin]');
   if (b) { pinned = pinned === b.dataset.pin ? null : b.dataset.pin; try { await Hostwerk.storage.set('pinned', pinned); } catch (er) { Hostwerk.toast(er.message, { kind: 'error' }); } reload(); }
 });
@@ -131,7 +152,14 @@ Hostwerk.ready().then(async (info) => {
   pinned = (await Hostwerk.storage.get('pinned').catch(() => null)) || null;
   events = (await Hostwerk.storage.get('events').catch(() => null)) || [];
   settings = await Hostwerk.settings.get().catch(() => ({}));
+  peaks = (await Hostwerk.storage.get('peaks').catch(() => null)) || peaks;
+  const search = document.getElementById('search');
+  if (search) { search.setAttribute('aria-label', t('searchPlayer')); search.addEventListener('input', Live.throttle(() => { query = search.value; reload(); }, 300)); }
   showTab(info.tab);
+  // Webserver → „Seiten von Erweiterungen“ → Einstellungen: ?action=site&target=<seite>
+  const act = (a) => { if (!a || a.id !== 'site') return; Hostwerk.setTab('site').catch(() => {}); showTab('site'); if (window.TickerSite) window.TickerSite.open(a.target || ''); };
+  Hostwerk.on('action', act);
+  act(info.action);
   schedule();
   Hostwerk.on('tab', showTab);
   // Live: players join/leave, servers start/stop, settings change – bundled, at most every 2 s

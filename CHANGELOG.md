@@ -1,3 +1,9 @@
+## 1.5.0
+
+- Section in the “Players” tab of every Minecraft server (Hostwerk with SDK 3.2): who is on that server, today’s peak, latest joins and leaves. / Abschnitt im Reiter „Spieler“ jedes Minecraft-Servers: wer da ist, Höchststand heute, letztes Kommen und Gehen.
+- Player search, today’s peak per server, joins and leaves filtered by server. / Spielersuche, Höchststand heute je Server, Kommen und Gehen nach Server.
+- Provide as a web page: “Who is online?” in a subfolder of a web server, renewed at an interval, with player names as in the game, shortened or only numbers (Hostwerk with SDK 3.2, `host.sites`). / Als Webseite bereitstellen – mit Datenschutz-Wahl für Spielernamen.
+
 ## 1.4.0
 
 - Game servers too: with the extension “Game servers” its running servers appear next to Minecraft – players through the Steam query (permission `read:games`), in the live list, in joins and leaves, in the stream view and on the tile. / Auch Spiele-Server: Mit der Erweiterung „Spiele-Server“ stehen ihre laufenden Server neben Minecraft – Spieler über die Steam-Abfrage (Recht `read:games`), in der Live-Liste, bei Kommen und Gehen, in der Stream-Ansicht und auf der Kachel.

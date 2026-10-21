@@ -12,6 +12,9 @@ Who is on your Minecraft and game servers right now? A live list with player hea
 
 ## Features
 
+- **Right where you need it:** a section in the “Players” tab of every Minecraft server (Hostwerk with SDK 3.2) – who is on that server, today’s peak and the latest joins and leaves, without its own tab
+- **Player search**, **today’s peak** per server, joins and leaves **filtered by server**
+- **Provide as a web page** (tab “Web page”, Hostwerk with SDK 3.2): Hostwerk writes an own “Who is online?” page (HTML + JSON) into a subfolder of one of your web servers and renews it at the chosen interval – heading, accent colour, light/dark/system, language, all or one server, stopped servers yes/no and **player names as in the game, shortened or only numbers**. No addresses or IDs; no Hostwerk sign-in needed for visitors. Web servers show these pages under “Pages from extensions”.
 - Live player list with heads, updates the moment someone joins or leaves
 - Heads are drawn locally from the name (works offline, no player name leaves your computer); real skin heads from mc-heads.net only if you switch it on in the settings – if that service does not answer, the local head shows instead
 - “Joins and leaves” tab with the time of day – Hostwerk also knows who left in the last 24 hours while the page was closed

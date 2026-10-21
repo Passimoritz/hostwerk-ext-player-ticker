@@ -111,5 +111,26 @@
     return ((data && data.servers) || []).flatMap((s) => (s.players || []).map((name) => ({ name, server: s.name }))).sort((a, b) => a.server.localeCompare(b.server) || a.name.localeCompare(b.name));
   }
 
-  return { playMs, sortServers, onlineCount, topPlayers, headSvg, headUrl, isBedrock, diff, snapshot, leavesFromStats, journal, fromGames, publicPlayers, onlineList };
+  /* ---------- 1.5: Suche, Filter, Höchststand ---------- */
+  /** Namen, die den Suchtext enthalten (ohne Groß/Klein); leer = alle. */
+  function filterNames(names, q) { const n = String(q || '').trim().toLowerCase(); return n ? (names || []).filter((x) => String(x).toLowerCase().includes(n)) : (names || []); }
+  /** Kommen und Gehen: nur ein Server und/oder Namen mit dem Suchtext. */
+  function filterEvents(list, { server = '', query = '' } = {}) {
+    const n = String(query || '').trim().toLowerCase();
+    return (list || []).filter((e) => (!server || e.server === server) && (!n || String(e.name).toLowerCase().includes(n)));
+  }
+  /**
+   * Höchststand heute je Server: { day, max: { id: n } }. Gibt dasselbe Objekt zurück, wenn sich nichts geändert hat
+   * (dann muss nichts gespeichert werden); ein neuer Tag fängt bei null an.
+   */
+  function peaks(prev, servers, now = Date.now()) {
+    const day = new Date(now).toISOString().slice(0, 10);
+    const base = prev && prev.day === day ? prev : { day, max: {} };
+    let changed = base !== prev;
+    const max = { ...base.max };
+    for (const s of servers || []) { const n = ((s.extra && s.extra.players) || []).length; if (n > (max[s.id] || 0)) { max[s.id] = n; changed = true; } }
+    return changed ? { day, max } : prev;
+  }
+
+  return { playMs, sortServers, onlineCount, topPlayers, headSvg, headUrl, isBedrock, diff, snapshot, leavesFromStats, journal, fromGames, publicPlayers, onlineList, filterNames, filterEvents, peaks };
 }));
