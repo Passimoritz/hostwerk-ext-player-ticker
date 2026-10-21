@@ -5,21 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="/ext-sdk.js"></script>
   <style>
-    .server-head { display: flex; align-items: center; gap: 10px; }
-    .server-head b { font-size: 16px; }
-    .players { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .pinned { border-color: color-mix(in srgb, var(--accent) 55%, var(--hw-line)); }
-    .ranking { margin: 12px 0 0; padding: 0; list-style: none; counter-reset: rank; }
-    .ranking li { counter-increment: rank; display: flex; gap: 8px; align-items: center; padding: 5px 0; color: var(--hw-text-2); }
-    .ranking li::before { content: counter(rank); width: 20px; height: 20px; border-radius: 6px; display: inline-grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--hw-surface-3); color: var(--hw-text); }
+    .server-head { display: flex; align-items: center; gap: var(--sp-2); }
+    .server-head b { font-size: var(--fs-lg); }
+    .players { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-3); }
+    .pinned { border-color: var(--accent); }
+    .ranking { margin: var(--sp-3) 0 0; padding: 0; list-style: none; counter-reset: rank; }
+    .ranking li { counter-increment: rank; display: flex; gap: var(--sp-2); align-items: center; padding: var(--sp-1) 0; color: var(--text-2); }
+    .ranking li::before { content: counter(rank); width: 20px; height: 20px; border-radius: var(--r-sm); display: inline-grid; place-items: center; font-size: var(--fs-2xs); font-weight: 700; background: var(--surface-3); color: var(--text); }
     .pin { margin-left: auto; }
+    .events { list-style: none; margin: 0; padding: 0; }
+    .events li { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto minmax(0, 8em); gap: var(--sp-2); align-items: center; padding: var(--sp-1) 0; border-bottom: 1px solid var(--line); }
+    /* Stream-Ansicht: durchsichtig, große Schrift – für die Fensteraufnahme in OBS */
+    body.stream { background: transparent; }
+    body.stream #sub { display: none; }
+    .stream-count { font-size: var(--fs-3xl); font-weight: 700; margin-bottom: var(--sp-4); }
+    .stream-list { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+    .stream-player { display: flex; align-items: center; gap: var(--sp-3); font-size: var(--fs-2xl); font-weight: 600; }
+    .stream-player img { width: 40px; height: 40px; border-radius: var(--r-sm); image-rendering: pixelated; }
+    .hw-avatar { image-rendering: pixelated; }
   </style>
 </head>
 <body>
-  <div class="row">
-    <div class="grow"><p class="muted" id="sub" data-i18n="loading"></p></div>
-  </div>
-  <div id="list" class="stack"><div class="hw-skeleton" style="height:110px"></div><div class="hw-skeleton" style="height:110px"></div></div>
+  <p class="muted" id="sub" data-i18n="loading"></p>
+  <section data-tab="live"><div id="list" class="stack"><div class="hw-skeleton" style="height:110px"></div><div class="hw-skeleton" style="height:110px"></div></div></section>
+  <section data-tab="events" hidden><div class="card card-pad" id="events"></div></section>
+  <section data-tab="stream" hidden><div id="stream"></div></section>
+  <script src="live.js"></script>
   <script src="lib.js"></script>
   <script src="app.js"></script>
 </body>

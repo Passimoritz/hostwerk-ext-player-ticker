@@ -5,27 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="/ext-sdk.js"></script>
   <style>
-    .big { font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
-    .heads { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-    .row { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; font-size: 13px; }
+    .big { font-size: var(--fs-3xl); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+    .heads { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
+    .heads img { image-rendering: pixelated; }
+    .line { display: flex; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-1) 0; font-size: var(--fs-sm); }
   </style>
 </head>
 <body>
-  <div class="stat"><div class="k" data-i18n="widgetTitle"></div><div class="big" id="count">–</div></div>
+  <div class="stat"><div class="k" data-i18n="widgetTitle"></div><div class="big" id="count" aria-live="polite">–</div></div>
   <div class="heads" id="heads"></div>
   <div id="servers"></div>
-  <script>
-    const { html, t } = Hostwerk;
-    async function load() {
-      const servers = (await Hostwerk.minecraft.servers()).filter((s) => s.state === 'running');
-      const names = servers.flatMap((s) => s.extra.players || []);
-      document.getElementById('count').textContent = t('playersOnline', { n: names.length });
-      Hostwerk.render('#heads', html`${names.slice(0, 16).map((n) => html`<img class="hw-avatar" title="${n}" src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/40" alt="">`)}`);
-      Hostwerk.render('#servers', servers.length
-        ? html`${servers.map((s) => html`<div class="row"><span class="ellipsis">${s.name}</span><span class="muted">${(s.extra.players || []).length}</span></div>`)}`
-        : html`<div class="muted small">${t('noRunning')}</div>`);
-    }
-    Hostwerk.ready().then(() => { load(); Hostwerk.on('minecraft', load); Hostwerk.on('service', load); setInterval(load, 15000); });
-  </script>
+  <script src="../page/live.js"></script>
+  <script src="../page/lib.js"></script>
+  <script src="widget.js"></script>
 </body>
 </html>

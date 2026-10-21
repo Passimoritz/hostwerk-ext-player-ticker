@@ -6,10 +6,10 @@
     "en": "Player Ticker"
   },
   "description": {
-    "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS und Spielzeit-Rangliste – schön für Streams und Discord-Bildschirme.",
-    "en": "Who is on your Minecraft servers right now? Live list with heads, TPS and a playtime ranking – great for streams and Discord screens."
+    "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht für OBS und Discord-Bildschirme.",
+    "en": "Who is on your Minecraft servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view for OBS and Discord screens."
   },
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "banner": "banner.svg",
   "color": "#23964a",
   "category": "games",
-  "hostwerk": ">=2.9.0",
+  "hostwerk": ">=2.11.0",
   "permissions": [
     "read:services",
     "read:minecraft",
@@ -31,9 +31,40 @@
     "icon": "users",
     "file": "page/index.html",
     "description": {
-      "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS und Spielzeit-Rangliste – schön für Streams und Discord-Bildschirme.",
-      "en": "Who is on your Minecraft servers right now? Live list with heads, TPS and a playtime ranking – great for streams and Discord screens."
-    }
+      "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht für OBS und Discord-Bildschirme.",
+      "en": "Who is on your Minecraft servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view for OBS and Discord screens."
+    },
+    "nav": {
+      "group": "server",
+      "after": "mc",
+      "order": 60
+    },
+    "tabs": [
+      {
+        "id": "live",
+        "title": {
+          "de": "Live",
+          "en": "Live"
+        },
+        "icon": "users"
+      },
+      {
+        "id": "events",
+        "title": {
+          "de": "Kommen und Gehen",
+          "en": "Joins and leaves"
+        },
+        "icon": "clock"
+      },
+      {
+        "id": "stream",
+        "title": {
+          "de": "Stream-Ansicht",
+          "en": "Stream view"
+        },
+        "icon": "tv"
+      }
+    ]
   },
   "widget": {
     "title": {
@@ -102,6 +133,21 @@
       "default": 10,
       "min": 3,
       "max": 120
+    },
+    {
+      "key": "remoteHeads",
+      "type": "switch",
+      "label": {
+        "de": "Echte Skin-Köpfe von mc-heads.net laden (schickt die Spielernamen an diesen Dienst)",
+        "en": "Load real skin heads from mc-heads.net (sends the player names to that service)"
+      },
+      "default": false
     }
-  ]
+  ],
+  "settingsTab": "extensions",
+  "allowExtensions": {
+    "*": [
+      "tabs"
+    ]
+  }
 }
