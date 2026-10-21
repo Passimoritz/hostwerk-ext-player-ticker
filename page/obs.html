@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Player Ticker</title>
+  <style>
+    /* hostwerk-allow: colors, fonts – öffentliche OBS-Ansicht (/v/player-ticker/) läuft ohne Hostwerk: eigene Farben auf durchsichtigem Grund, Systemschrift */
+    :root { --fg: #ffffff; --muted: rgba(255, 255, 255, .72); --chip: rgba(0, 0, 0, .45); --ok: #4ade80; --shadow: 0 2px 6px rgba(0, 0, 0, .6); --size: 28px; }
+    :root[data-theme="light"] { --fg: #111827; --muted: rgba(17, 24, 39, .7); --chip: rgba(255, 255, 255, .7); --ok: #15803d; --shadow: none; }
+    html, body { margin: 0; background: transparent; color: var(--fg); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: var(--size); }
+    body { padding: .5em; }
+    .count { font-weight: 700; font-size: 1.2em; text-shadow: var(--shadow); margin-bottom: .4em; }
+    .count .dot { display: inline-block; width: .45em; height: .45em; border-radius: 50%; background: var(--ok); margin-right: .35em; vertical-align: middle; }
+    .list { display: flex; flex-wrap: wrap; gap: .35em .6em; }
+    .player { display: inline-flex; align-items: center; gap: .35em; background: var(--chip); padding: .15em .5em .15em .2em; border-radius: .4em; font-weight: 600; text-shadow: var(--shadow); }
+    .player img { width: 1.3em; height: 1.3em; image-rendering: pixelated; border-radius: .15em; }
+    .server { color: var(--muted); font-weight: 500; font-size: .7em; }
+    .note { color: var(--muted); font-size: .7em; text-shadow: var(--shadow); }
+  </style>
+</head>
+<body>
+  <div class="count" id="count" aria-live="polite"></div>
+  <div class="list" id="list"></div>
+  <p class="note" id="note" hidden></p>
+  <script src="lib.js"></script>
+  <script src="obs.js"></script>
+</body>
+</html>

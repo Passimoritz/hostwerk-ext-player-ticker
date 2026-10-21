@@ -19,11 +19,16 @@
   "left": "left",
   "noEvents": "Nobody has joined or left yet. The list fills up as soon as something happens – Hostwerk already knows who left in the last 24 hours.",
   "noServers": "No Minecraft server yet",
-  "noServersHint": "Create a server in Hostwerk under Minecraft – it shows up here right away.",
+  "noServersHint": "Create a server in Hostwerk under Minecraft – it shows up here right away. Game servers from the extension “Game servers” appear as soon as they run.",
   "error": "Could not load",
   "loadError": "Could not load the players",
   "retry": "Try again",
   "widgetTitle": "Players online",
   "playersOnline": "{n} online",
-  "noRunning": "No server running"
+  "noRunning": "No server running",
+  "gameServer": "Game server (Steam query)",
+  "obsTitle": "Own address for OBS",
+  "obsHint": "Add it in OBS as a “Browser” source – transparent, without Hostwerk around it. Options: ?theme=light, ?size=20, ?servers=1, ?count=0, ?server=<id>.",
+  "obsOff": "There is an own address for OBS without sign-in. Switch on “Share the stream view without sign-in” in the settings – then anyone with the address sees who is playing.",
+  "copyLink": "Copy address"
 }

@@ -81,5 +81,35 @@
     for (const e of all) if (!out.some((x) => x.name === e.name && x.server === e.server && x.kind === e.kind && Math.abs(x.t - e.t) < 120000)) out.push(e);
     return out.slice(0, max);
   }
-  return { playMs, sortServers, onlineCount, topPlayers, headSvg, headUrl, isBedrock, diff, snapshot, leavesFromStats, journal };
+  /* ---------- Spiele-Server (Erweiterung „Spiele-Server“, Recht read:games) ---------- */
+  /**
+   * /games-players → Einträge in der Form der Minecraft-Server ({ id, name, state, extra: { players } }), damit Karten,
+   * Kommen und Gehen und die Stream-Ansicht sie genauso behandeln. Kennung mit „game:“ davor (eigener Namensraum).
+   */
+  function fromGames(list) {
+    return (Array.isArray(list) ? list : []).filter((g) => g && g.id).map((g) => ({
+      id: `game:${g.id}`, kind: 'game', name: String(g.name || g.id), game: g.game || null, state: 'running',
+      extra: { players: (g.players || []).map((p) => String((p && p.name) || '')).filter(Boolean), max: g.max != null ? g.max : null },
+    }));
+  }
+
+  /* ---------- Öffentliche Ansicht (/v/player-ticker/, OBS) ---------- */
+  /**
+   * Antwort des Server-Teils: nur Namen und Zahlen. mc/games aus server/source.js; server = nur dieser (id oder game:id).
+   * → { at, servers: [{ id, kind, name, game, running, players, tps, max }], total, remoteHeads }
+   */
+  function publicPlayers(mc, games, { server = '', showOffline = true, remoteHeads = false, now = Date.now() } = {}) {
+    const all = [
+      ...(mc || []).map((s) => ({ id: s.id, kind: 'minecraft', name: s.name, game: null, running: !!s.running, players: s.running ? [...(s.players || [])] : [], tps: s.tps != null && Number.isFinite(s.tps) ? Math.round(s.tps * 10) / 10 : null, max: null })),
+      ...(games || []).map((g) => ({ id: `game:${g.id}`, kind: 'game', name: g.name, game: g.game || null, running: true, players: [...(g.players || [])], tps: null, max: g.max != null ? g.max : null })),
+    ].filter((s) => (!server || s.id === server) && (showOffline || s.running));
+    all.sort((a, b) => (b.running - a.running) || b.players.length - a.players.length || String(a.name).localeCompare(String(b.name)));
+    return { at: now, servers: all, total: all.reduce((n, s) => n + s.players.length, 0), remoteHeads: !!remoteHeads };
+  }
+  /** Für die OBS-Liste: alle Spieler online [{ name, server }] – nach Server, dann Name. */
+  function onlineList(data) {
+    return ((data && data.servers) || []).flatMap((s) => (s.players || []).map((name) => ({ name, server: s.name }))).sort((a, b) => a.server.localeCompare(b.server) || a.name.localeCompare(b.name));
+  }
+
+  return { playMs, sortServers, onlineCount, topPlayers, headSvg, headUrl, isBedrock, diff, snapshot, leavesFromStats, journal, fromGames, publicPlayers, onlineList };
 }));

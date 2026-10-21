@@ -6,10 +6,10 @@
     "en": "Player Ticker"
   },
   "description": {
-    "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht für OBS und Discord-Bildschirme.",
-    "en": "Who is on your Minecraft servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view for OBS and Discord screens."
+    "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht und eigener Adresse für OBS.",
+    "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view and its own address for OBS."
   },
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
   "license": "MIT",
@@ -17,12 +17,24 @@
   "banner": "banner.svg",
   "color": "#23964a",
   "category": "games",
-  "hostwerk": ">=2.11.0",
+  "hostwerk": ">=3.0.0",
+  "sdkVersion": "3.0",
   "permissions": [
     "read:services",
     "read:minecraft",
-    "storage"
+    "read:games",
+    "share:view",
+    "storage",
+    "native"
   ],
+  "backend": "server/index.js",
+  "publicView": {
+    "file": "page/obs.html",
+    "title": {
+      "de": "Spieler online (OBS)",
+      "en": "Players online (OBS)"
+    }
+  },
   "page": {
     "title": {
       "de": "Spieler-Ticker",
@@ -31,8 +43,8 @@
     "icon": "users",
     "file": "page/index.html",
     "description": {
-      "de": "Wer ist gerade auf deinen Minecraft-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht für OBS und Discord-Bildschirme.",
-      "en": "Who is on your Minecraft servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view for OBS and Discord screens."
+      "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielzeit-Rangliste und Kommen und Gehen – mit Stream-Ansicht und eigener Adresse für OBS.",
+      "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, a playtime ranking and who joined or left – with a stream view and its own address for OBS."
     },
     "nav": {
       "group": "server",
@@ -140,6 +152,15 @@
       "label": {
         "de": "Echte Skin-Köpfe von mc-heads.net laden (schickt die Spielernamen an diesen Dienst)",
         "en": "Load real skin heads from mc-heads.net (sends the player names to that service)"
+      },
+      "default": false
+    },
+    {
+      "key": "publicView",
+      "type": "switch",
+      "label": {
+        "de": "Stream-Ansicht ohne Anmeldung freigeben (eigene Adresse für OBS – zeigt Spieler- und Servernamen)",
+        "en": "Share the stream view without sign-in (own address for OBS – shows player and server names)"
       },
       "default": false
     }

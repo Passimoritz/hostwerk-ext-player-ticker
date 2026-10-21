@@ -1,3 +1,9 @@
+## 1.4.0
+
+- Game servers too: with the extension “Game servers” its running servers appear next to Minecraft – players through the Steam query (permission `read:games`), in the live list, in joins and leaves, in the stream view and on the tile. / Auch Spiele-Server: Mit der Erweiterung „Spiele-Server“ stehen ihre laufenden Server neben Minecraft – Spieler über die Steam-Abfrage (Recht `read:games`), in der Live-Liste, bei Kommen und Gehen, in der Stream-Ansicht und auf der Kachel.
+- Real OBS view: the stream view now has its own address without sign-in (`/v/player-ticker/`, permission `share:view`) – transparent, without Hostwerk around it, for an OBS “Browser” source. Off until you switch on “Share the stream view without sign-in”; it only shows player and server names. Options: `?theme=light`, `?size=20`, `?servers=1`, `?count=0`, `?server=<id>`, `?lang=de`. / Echte OBS-Ansicht: Die Stream-Ansicht hat jetzt eine eigene Adresse ohne Anmeldung (`/v/player-ticker/`, Recht `share:view`) – durchsichtig, ohne Hostwerk drumherum, für eine OBS-„Browser“-Quelle. Aus, bis du „Stream-Ansicht ohne Anmeldung freigeben“ einschaltest; sie zeigt nur Spieler- und Servernamen.
+- Needs Hostwerk 3.0 (SDK 3.0). / Braucht Hostwerk 3.0 (SDK 3.0).
+
 ## 1.3.0
 
 - Heads no longer come from a third-party service: a small pixel face is drawn from the name (offline, no player name leaves the computer). Real skin heads from mc-heads.net only after switching on the new setting – with the local head as fallback. / Köpfe kommen nicht mehr von einem fremden Dienst: ein kleines Pixel-Gesicht entsteht aus dem Namen (offline, kein Spielername verlässt den Rechner). Echte Skin-Köpfe von mc-heads.net nur nach Einschalten der neuen Einstellung – mit dem gezeichneten Kopf als Ersatz.

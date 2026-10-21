@@ -4,7 +4,7 @@
 
 **English** · [Deutsch](README.de.md)
 
-Who is on your Minecraft servers right now? A live list with player heads, TPS and a playtime ranking – great for streams and Discord screens. Includes a dashboard tile.
+Who is on your Minecraft and game servers right now? A live list with player heads, TPS and a playtime ranking – great for streams and Discord screens. Includes a dashboard tile.
 
 | Dark | Light |
 |---|---|
@@ -16,6 +16,8 @@ Who is on your Minecraft servers right now? A live list with player heads, TPS a
 - Heads are drawn locally from the name (works offline, no player name leaves your computer); real skin heads from mc-heads.net only if you switch it on in the settings – if that service does not answer, the local head shows instead
 - “Joins and leaves” tab with the time of day – Hostwerk also knows who left in the last 24 hours while the page was closed
 - “Stream view” tab: transparent, large text – for OBS window capture
+- Own address for OBS without sign-in (`/v/player-ticker/`): transparent, without Hostwerk around it, for a “Browser” source – only after you switch on “Share the stream view without sign-in”; shows only player and server names. Options: `?theme=light`, `?size=20` (font size), `?servers=1` (server names), `?count=0` (no counter), `?server=<id>`, `?lang=de`
+- Game servers from the extension “Game servers” next to Minecraft – players through the Steam query
 - Bedrock players (Geyser/Floodgate) get a badge
 - TPS per server, stopped servers optional
 - Playtime ranking (top 3/5/10, configurable) – fetched at most once a minute, not on every refresh
@@ -26,15 +28,18 @@ Who is on your Minecraft servers right now? A live list with player heads, TPS a
 
 ## Install
 
-In Hostwerk (2.11 or newer): **Apps → Extensions → Marketplace → Player Ticker → Install** (badge *Official*).
+In Hostwerk (3.0 or newer): **Apps → Extensions → Marketplace → Player Ticker → Install** (badge *Official*).
 Or manually: download `player-ticker-<version>.zip` from the [latest release](../../releases/latest) → *Apps → Extensions → File*.
 
 ## Permissions
 
 - `read:services`, `read:minecraft` – see servers and players
+- `read:games` – game servers and their players (extension “Game servers”)
+- `share:view` – the public view for OBS (`/v/player-ticker/`, off until you share it)
+- `native` – a small server part that answers the public view (only names and numbers)
 - `storage` – remember the pinned server and the joins and leaves
 
-Runs sandboxed in Hostwerk – no access to logins, settings or files.
+The page runs sandboxed in Hostwerk – no access to logins, settings or files.
 
 ## Build your own
 

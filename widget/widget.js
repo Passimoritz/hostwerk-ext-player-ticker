@@ -2,7 +2,9 @@
 const { html, t } = Hostwerk;
 async function load() {
   const settings = await Hostwerk.settings.get().catch(() => ({}));
-  const servers = (await Hostwerk.minecraft.servers()).filter((s) => s.state === 'running');
+  // Minecraft und – mit der Erweiterung „Spiele-Server“ – laufende Spiele-Server
+  const games = Ticker.fromGames(await Hostwerk.get('/games-players').catch(() => []));
+  const servers = [...(await Hostwerk.minecraft.servers()), ...games].filter((s) => s.state === 'running');
   const names = servers.flatMap((s) => s.extra.players || []);
   document.getElementById('count').textContent = t('playersOnline', { n: Hostwerk.fmt.number(names.length) });
   Hostwerk.render('#heads', html`${names.slice(0, 16).map((n) => html`<img class="hw-avatar" title="${n}" src="${Ticker.headUrl(n, { remote: !!settings.remoteHeads, size: 40 })}" data-name="${n}" alt="${n}" width="20" height="20">`)}`);

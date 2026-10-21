@@ -19,11 +19,16 @@
   "left": "ging",
   "noEvents": "Noch niemand gekommen oder gegangen. Die Liste füllt sich, sobald sich etwas tut – wer in den letzten 24 Stunden gegangen ist, weiß Hostwerk schon.",
   "noServers": "Noch kein Minecraft-Server",
-  "noServersHint": "Lege in Hostwerk unter Minecraft einen Server an – er erscheint hier sofort.",
+  "noServersHint": "Lege in Hostwerk unter Minecraft einen Server an – er erscheint hier sofort. Spiele-Server aus der Erweiterung „Spiele-Server“ erscheinen, sobald sie laufen.",
   "error": "Konnte nicht laden",
   "loadError": "Spieler konnten nicht geladen werden",
   "retry": "Erneut versuchen",
   "widgetTitle": "Spieler online",
   "playersOnline": "{n} online",
-  "noRunning": "Kein Server läuft"
+  "noRunning": "Kein Server läuft",
+  "gameServer": "Spiele-Server (Steam-Abfrage)",
+  "obsTitle": "Eigene Adresse für OBS",
+  "obsHint": "In OBS als „Browser“-Quelle einfügen – durchsichtig, ohne Hostwerk drumherum. Zusätze: ?theme=light, ?size=20, ?servers=1, ?count=0, ?server=<id>.",
+  "obsOff": "Für OBS gibt es eine eigene Adresse ohne Anmeldung. Schalte dafür in den Einstellungen „Stream-Ansicht ohne Anmeldung freigeben“ ein – dann sieht jeder mit der Adresse, wer gerade spielt.",
+  "copyLink": "Adresse kopieren"
 }
