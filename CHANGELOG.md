@@ -1,3 +1,7 @@
+## 1.5.1
+
+- Lives where it belongs: Minecraft server → Players (section) and the dashboard tile – no own sidebar entry any more (Hostwerk 3.0+); the full page stays under Extensions → Open and can be pinned in the sidebar settings. / Steckt jetzt dort, wo sie hingehört: Minecraft-Server → Spieler (Abschnitt) und Übersichtskachel – kein eigener Seitenleisten-Eintrag mehr (Hostwerk 3.0+); die ganze Seite bleibt unter Erweiterungen → Öffnen und lässt sich in den Seitenleisten-Einstellungen anheften.
+
 ## 1.5.0
 
 - Section in the “Players” tab of every Minecraft server (Hostwerk with SDK 3.2): who is on that server, today’s peak, latest joins and leaves. / Abschnitt im Reiter „Spieler“ jedes Minecraft-Servers: wer da ist, Höchststand heute, letztes Kommen und Gehen.

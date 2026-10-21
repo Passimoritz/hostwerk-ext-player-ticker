@@ -10,6 +10,7 @@ Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen,
 
 ## Funktionen
 
+- **Wo:** Minecraft-Server → Spieler (Abschnitt) und Übersichtskachel – seit 1.5.1 ohne eigenen Seitenleisten-Eintrag; die ganze Seite bleibt unter Erweiterungen → Öffnen
 - **Gleich dort, wo man ihn braucht:** Abschnitt im Reiter „Spieler“ jedes Minecraft-Servers (Hostwerk mit SDK 3.2) – wer auf diesem Server ist, Höchststand heute und das letzte Kommen und Gehen, ohne eigenen Reiter
 - **Spielersuche**, **Höchststand heute** je Server, Kommen und Gehen **nach Server gefiltert**
 - **Als Webseite bereitstellen** (Reiter „Webseite“, Hostwerk mit SDK 3.2): Hostwerk legt eine eigene Seite „Wer ist online?“ (HTML + JSON) in einen Unterordner eines deiner Webserver und erneuert sie im gewählten Takt – Überschrift, Akzentfarbe, hell/dunkel/wie das System, Sprache, alle oder ein Server, gestoppte Server ja/nein und **Spielernamen wie im Spiel, gekürzt oder nur Zahlen**. Keine Adressen oder IDs; Besucher brauchen keine Hostwerk-Anmeldung. Webserver zeigen diese Seiten unter „Seiten von Erweiterungen“.

@@ -12,6 +12,7 @@ Who is on your Minecraft and game servers right now? A live list with player hea
 
 ## Features
 
+- **Where:** Minecraft server → Players (section) and the dashboard tile – no own sidebar entry since 1.5.1; the full page stays under Extensions → Open
 - **Right where you need it:** a section in the “Players” tab of every Minecraft server (Hostwerk with SDK 3.2) – who is on that server, today’s peak and the latest joins and leaves, without its own tab
 - **Player search**, **today’s peak** per server, joins and leaves **filtered by server**
 - **Provide as a web page** (tab “Web page”, Hostwerk with SDK 3.2): Hostwerk writes an own “Who is online?” page (HTML + JSON) into a subfolder of one of your web servers and renews it at the chosen interval – heading, accent colour, light/dark/system, language, all or one server, stopped servers yes/no and **player names as in the game, shortened or only numbers**. No addresses or IDs; no Hostwerk sign-in needed for visitors. Web servers show these pages under “Pages from extensions”.
