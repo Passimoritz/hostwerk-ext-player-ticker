@@ -1,6 +1,6 @@
 {
   "title": "Spieler-Ticker",
-  "loading": "Lade …",
+  "loading": "Lädt …",
   "settings": "Einstellungen",
   "summary": "Spieler online: {players} · Server aktiv: {servers} · Stand {time}",
   "running": "läuft",
