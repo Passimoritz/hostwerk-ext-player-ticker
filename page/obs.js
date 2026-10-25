@@ -3,10 +3,12 @@
 // Address options: ?server=<id or game:id> · ?theme=light · ?lang=de · ?size=20 (font size in px) · ?count=0 (no counter) · ?servers=1 (server names)
 (function () {
   const q = new URLSearchParams(location.search);
+  // Alte Adresse der Bestenliste (/v/player-leaderboard/…, Hostwerk leitet mit ?from=player-leaderboard hierher) oder ?view=board
+  if (q.get('from') === 'player-leaderboard' || q.get('view') === 'board') { q.delete('from'); q.delete('view'); location.replace(`board-obs.html${q.toString() ? `?${q}` : ''}`); return; }
   const lang = (q.get('lang') || navigator.language || 'en').slice(0, 2) === 'de' ? 'de' : 'en';
   const TEXT = {
-    de: { online: (n) => `${n} online`, nobody: 'Gerade niemand online', off: 'Die Stream-Ansicht ist in Hostwerk nicht freigegeben (Einstellungen → Erweiterungen → Spieler-Ticker).', error: 'Hostwerk antwortet gerade nicht – neuer Versuch gleich.' },
-    en: { online: (n) => `${n} online`, nobody: 'Nobody online right now', off: 'The stream view is not shared in Hostwerk (Settings → Extensions → Player Ticker).', error: 'Hostwerk does not answer right now – trying again shortly.' },
+    de: { online: (n) => `${n} online`, nobody: 'Gerade niemand online', off: 'Die Stream-Ansicht ist in Hostwerk nicht freigegeben (Einstellungen → Erweiterungen → Spieler).', error: 'Hostwerk antwortet gerade nicht – neuer Versuch gleich.' },
+    en: { online: (n) => `${n} online`, nobody: 'Nobody online right now', off: 'The stream view is not shared in Hostwerk (Settings → Extensions → Players).', error: 'Hostwerk does not answer right now – trying again shortly.' },
   }[lang];
   document.documentElement.lang = lang;
   if (q.get('theme') === 'light') document.documentElement.dataset.theme = 'light';

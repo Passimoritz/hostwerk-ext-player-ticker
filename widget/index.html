@@ -9,14 +9,21 @@
     .heads { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
     .heads img { image-rendering: pixelated; }
     .line { display: flex; justify-content: space-between; gap: var(--sp-2); padding: var(--sp-1) 0; font-size: var(--fs-sm); }
+    /* 2.0: die drei Ersten der Bestenliste darunter (Einstellung „tileBoard“) */
+    .lb-top { margin-top: var(--sp-3); border-top: 1px solid var(--line); padding-top: var(--sp-2); }
+    .lb-top .line { justify-content: flex-start; }
+    .lb-top .grow { flex: 1; min-width: 0; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   </style>
 </head>
 <body>
   <div class="stat"><div class="k" data-i18n="widgetTitle"></div><div class="big" id="count" aria-live="polite">–</div></div>
   <div class="heads" id="heads"></div>
   <div id="servers"></div>
+  <div id="lb-top" class="lb-top" hidden></div>
   <script src="../page/live.js"></script>
   <script src="../page/lib.js"></script>
+  <script src="../page/board-lib.js"></script>
   <script src="widget.js"></script>
 </body>
 </html>

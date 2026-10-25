@@ -117,24 +117,31 @@ function drawStream(servers) {
     <div class="stream-list">${names.map((x) => html`<div class="stream-player"><img src="${head(x.n, 64)}" data-name="${x.n}" alt="" width="40" height="40"><span>${x.n}</span></div>`)}</div>`);
 }
 /** Address of the public view – for an OBS browser source, without Hostwerk around it. */
-const publicUrl = () => { let origin = ''; try { origin = new URL(document.referrer).origin; } catch { /* Adresse steht auch in der Detailansicht der Erweiterung */ } return `${origin}/v/player-ticker/`; };
+const origin = () => { try { return new URL(document.referrer).origin; } catch { return ''; /* Adresse steht auch in der Detailansicht der Erweiterung */ } };
+const publicUrl = () => `${origin()}/v/player-ticker/`;
+// Bestenliste für OBS (seit 2.0 hier, vorher /v/player-leaderboard/ – alte Adressen leitet Hostwerk weiter)
+const boardUrl = () => `${origin()}/v/player-ticker/board-obs.html?metric=${encodeURIComponent(settings.boardMetric || 'playMs')}`;
 function obsCard() {
-  return html`<div class="card card-pad obs-card stack">
-    <b>${t('obsTitle')}</b>
-    ${settings.publicView
-    ? html`<div class="row-tight"><code class="grow ellipsis">${publicUrl()}</code><button type="button" class="btn sm" data-copy-url aria-label="${t('copyLink')}">${t('copyLink')}</button></div><p class="muted small">${t('obsHint')}</p>`
-    : html`<p class="muted small">${t('obsOff')}</p><div><button type="button" class="btn sm" data-open-settings>${t('settings')}</button></div>`}
+  const box = (title, on, url, attr, hint, off) => html`<div class="card card-pad obs-card stack">
+    <b>${title}</b>
+    ${on
+    ? html`<div class="row-tight"><code class="grow ellipsis">${url}</code><button type="button" class="btn sm" ${Hostwerk.raw(attr)} aria-label="${t('copyLink')}">${t('copyLink')}</button></div><p class="muted small">${hint}</p>`
+    : html`<p class="muted small">${off}</p><div><button type="button" class="btn sm" data-open-settings>${t('settings')}</button></div>`}
   </div>`;
+  return html`${box(t('obsTitle'), settings.publicView, publicUrl(), 'data-copy-url', t('obsHint'), t('obsOff'))}${box(t('lb.obsTitle'), settings.boardPublic, boardUrl(), 'data-copy-board-url', t('lb.obsHint'), t('lb.obsOff'))}`;
 }
 
 const target = () => (tab === 'stream' ? '#stream' : tab === 'events' ? '#events' : tab === 'site' ? '#site' : '#list');
-const reload = () => (tab === 'site' ? Promise.resolve() : Live.guard(Hostwerk, target(), load));
+// „Bestenliste“ und „Webseite“ zeichnen ihre eigenen Teile (page/board.js, page/site.js, page/board-site.js)
+const reload = () => (tab === 'site' || tab === 'board' ? Promise.resolve() : Live.guard(Hostwerk, target(), load));
 
 function showTab(id) {
-  tab = ['stream', 'events', 'site'].includes(id) ? id : 'live';
+  tab = ['stream', 'events', 'site', 'board'].includes(id) ? id : 'live';
   for (const el of document.querySelectorAll('[data-tab]')) el.hidden = inSection() ? false : el.dataset.tab !== tab;
   document.body.classList.toggle('stream', tab === 'stream');
-  if (tab === 'site') { if (window.TickerSite) window.TickerSite.show(); return; }
+  document.body.classList.toggle('board', tab === 'board');
+  if (window.Board) { if (tab === 'board') window.Board.show(); else window.Board.hide(); }
+  if (tab === 'site') { if (window.TickerSite) window.TickerSite.show(); if (window.BoardSite) window.BoardSite.show(); return; }
   reload();
 }
 
@@ -145,6 +152,7 @@ function schedule() {
 
 document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-copy-url]')) { Hostwerk.copy(publicUrl()).catch(() => {}); return; }
+  if (e.target.closest('[data-copy-board-url]')) { Hostwerk.copy(boardUrl()).catch(() => {}); return; }
   if (e.target.closest('[data-open-settings]')) { Hostwerk.settings.open().catch(() => {}); return; }
   if (e.target.closest('[data-open-page]')) { Hostwerk.navigate('/ext/player-ticker').catch(() => {}); return; }
   const b = e.target.closest('[data-pin]');
@@ -165,7 +173,7 @@ Hostwerk.ready().then(async (info) => {
   if (search) { search.setAttribute('aria-label', t('searchPlayer')); search.addEventListener('input', Live.throttle(() => { query = search.value; reload(); }, 300)); }
   showTab(info.tab);
   // Webserver → „Seiten von Erweiterungen“ → Einstellungen: ?action=site&target=<seite>
-  const act = (a) => { if (!a || a.id !== 'site') return; Hostwerk.setTab('site').catch(() => {}); showTab('site'); if (window.TickerSite) window.TickerSite.open(a.target || ''); };
+  const act = (a) => { if (!a || a.id !== 'site') return; Hostwerk.setTab('site').catch(() => {}); showTab('site'); if (window.TickerSite) window.TickerSite.open(a.target || ''); if (a.target && window.BoardSite) window.BoardSite.open(a.target); };
   Hostwerk.on('action', act);
   act(info.action);
   schedule();

@@ -33,6 +33,25 @@
     .site-color { width: 48px; height: var(--control-h); padding: 0; border: 1px solid var(--line); border-radius: var(--r-sm); background: none; }
     body.section { padding: var(--sp-2) var(--sp-4) var(--sp-3); }
     body.section .card { box-shadow: none; }
+    /* 2.0: Bestenliste (früher eigene Erweiterung) – alles unter .lb, damit sich nichts mit dem Ticker überschneidet */
+    body.board #sub { display: none; }
+    .lb .tools { display: flex; gap: var(--sp-2); flex-wrap: wrap; align-items: center; margin: var(--sp-3) 0; }
+    .lb .entry { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--line); }
+    .lb .entry.top { font-size: var(--fs-lg); }
+    .lb .place { width: var(--control-h); text-align: center; font-weight: 700; color: var(--muted); }
+    .lb .value { font-variant-numeric: tabular-nums; font-weight: 650; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .lb .entry-name { border: 0; background: none; color: inherit; font: inherit; font-weight: 700; text-align: left; padding: 0; min-height: 24px; cursor: pointer; }
+    .lb .entry-name:hover, .lb .entry-name:focus-visible { color: var(--accent-text); text-decoration: underline; }
+    .lb .search { min-width: 180px; max-width: 240px; }
+    .lb .profile { margin-top: var(--sp-3); }
+    .lb .kvs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--sp-2); }
+    .lb .kv { display: flex; flex-direction: column; }
+    .lb .badges { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+    .lb .badge.lvl3 { background: var(--accent-soft); color: var(--accent-text); }
+    .lb .spark { width: 100%; max-width: 420px; height: 64px; color: var(--accent); }
+    .lb .site-metrics { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+    #lb-site { margin-top: var(--sp-4); }
   </style>
 </head>
 <body>
@@ -40,10 +59,38 @@
   <section data-tab="live"><div class="row-tight tools"><input class="input search" id="search" type="search" placeholder="Search player …" data-i18n-placeholder="searchPlayer" aria-label="Search player"></div><div id="list" class="stack"><div class="hw-skeleton" style="height:110px"></div><div class="hw-skeleton" style="height:110px"></div></div></section>
   <section data-tab="events" hidden><div class="card card-pad" id="events"></div></section>
   <section data-tab="stream" hidden><div id="stream"></div></section>
-  <section data-tab="site" hidden><div id="site"><div class="hw-skeleton" style="height:110px"></div></div></section>
+  <section data-tab="board" class="lb" hidden>
+    <p class="muted" id="lb-sub"></p>
+    <div class="tools">
+      <select class="select" id="lb-server" aria-label="Server"></select>
+      <div class="row-tight" id="lb-metrics" role="group">
+        <button type="button" class="btn sm primary" data-m="playMs" data-i18n="lb.metric.playMs">Playtime</button>
+        <button type="button" class="btn sm" data-m="sessions" data-i18n="lb.metric.sessions">Visits</button>
+        <button type="button" class="btn sm" data-m="mined" data-i18n="lb.metric.mined">Mined</button>
+        <button type="button" class="btn sm" data-m="deaths" data-i18n="lb.metric.deaths">Deaths</button>
+        <button type="button" class="btn sm" data-m="mobKills" data-i18n="lb.metric.mobKills">Mobs killed</button>
+        <button type="button" class="btn sm" data-m="playerKills" data-i18n="lb.metric.playerKills">Players killed</button>
+        <button type="button" class="btn sm" data-m="distanceKm" data-i18n="lb.metric.distanceKm">Distance</button>
+        <button type="button" class="btn sm" data-m="crafted" data-i18n="lb.metric.crafted">Crafted</button>
+      </div>
+      <div class="row-tight" id="lb-periods" role="group">
+        <button type="button" class="btn sm primary" data-d="0" data-i18n="lb.period.all">All time</button>
+        <button type="button" class="btn sm" data-d="30" data-i18n="lb.period.month">30 days</button>
+        <button type="button" class="btn sm" data-d="7" data-i18n="lb.period.week">7 days</button>
+      </div>
+      <input class="input search" id="lb-search" type="search" placeholder="Search player …" data-i18n-placeholder="lb.searchPlayer" aria-label="Search player">
+      <span id="lb-since"></span>
+    </div>
+    <div class="card card-pad" id="lb-list"><div class="hw-skeleton" style="height:120px"></div></div>
+    <div id="lb-profile"></div>
+  </section>
+  <section data-tab="site" hidden><div id="site"><div class="hw-skeleton" style="height:110px"></div></div><div id="lb-site" class="lb"></div></section>
   <script src="live.js"></script>
   <script src="lib.js"></script>
+  <script src="board-lib.js"></script>
   <script src="site.js"></script>
+  <script src="board-site.js"></script>
+  <script src="board.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

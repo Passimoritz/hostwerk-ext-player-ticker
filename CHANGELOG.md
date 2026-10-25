@@ -1,3 +1,10 @@
+## 2.0.0
+
+- Now "Players": the former extension "Player leaderboard" lives here (SDK 3.8 `replaces`). Hostwerk installs this version for everyone who had the leaderboard, takes over its daily snapshots, game-server playtime, settings and published web pages and removes it. / Jetzt „Spieler“: Die frühere Erweiterung „Spieler-Bestenliste“ steckt hier (SDK 3.8 `replaces`). Hostwerk installiert diese Fassung für alle mit der Bestenliste, übernimmt Tages-Schnappschüsse, Spielzeit auf Spiele-Servern, Einstellungen und veröffentlichte Webseiten und entfernt sie.
+- New tab "Leaderboard" (metrics, periods, search, profile card, badges, history); "Web page" offers both page kinds; the stream view shows both OBS addresses – the leaderboard at `/v/player-ticker/board-obs.html`, old `/v/player-leaderboard/` addresses are forwarded. / Neuer Reiter „Bestenliste“ (Kennzahlen, Zeiträume, Suche, Profilkarte, Abzeichen, Verlauf); „Webseite“ bietet beide Seitenarten; die Stream-Ansicht zeigt beide OBS-Adressen – die Bestenliste unter `/v/player-ticker/board-obs.html`, alte `/v/player-leaderboard/`-Adressen werden weitergeleitet.
+- Two sections in a Minecraft server's "Players" tab ("Online now", "Leaderboard") – each can be switched off in the settings (SDK 3.8 `showIf`). The tile shows the top three of the leaderboard below the players online (switchable). / Zwei Abschnitte im Reiter „Spieler“ eines Minecraft-Servers („Gerade online“, „Bestenliste“) – jeder in den Einstellungen abschaltbar (SDK 3.8 `showIf`). Die Kachel zeigt unter den Spielern online die drei Ersten der Bestenliste (abschaltbar).
+- Settings of the leaderboard are called `boardMetric`, `boardLimit` and `boardPublic` here. / Die Einstellungen der Bestenliste heißen hier `boardMetric`, `boardLimit` und `boardPublic`.
+
 ## 1.6.0
 
 - Hostwerk’s animations (SDK 3.6): the server cards rise one after another the first time, and without servers the page shows Hostwerk’s empty state. / Hostwerks Animationen (SDK 3.6): Die Server-Karten erscheinen beim ersten Mal nacheinander, ohne Server zeigt die Seite Hostwerks leeren Zustand.

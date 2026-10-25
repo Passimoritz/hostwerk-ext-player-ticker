@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard</title>
+  <style>
+    /* hostwerk-allow: colors, fonts – öffentliche OBS-Ansicht der Bestenliste (/v/player-ticker/board-obs.html) läuft ohne Hostwerk: eigene Farben auf durchsichtigem Grund, Systemschrift */
+    :root { --fg: #ffffff; --muted: rgba(255, 255, 255, .72); --row: rgba(0, 0, 0, .45); --gold: #facc15; --shadow: 0 2px 6px rgba(0, 0, 0, .6); --size: 26px; }
+    :root[data-theme="light"] { --fg: #111827; --muted: rgba(17, 24, 39, .7); --row: rgba(255, 255, 255, .72); --gold: #a16207; --shadow: none; }
+    html, body { margin: 0; background: transparent; color: var(--fg); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; font-size: var(--size); }
+    body { padding: .5em; }
+    h1 { margin: 0 0 .3em; font-size: 1.1em; text-shadow: var(--shadow); }
+    h1 small { color: var(--muted); font-weight: 500; font-size: .65em; margin-left: .4em; }
+    ol { list-style: none; margin: 0; padding: 0; display: grid; gap: .2em; }
+    li { display: flex; align-items: center; gap: .5em; background: var(--row); border-radius: .35em; padding: .15em .5em; text-shadow: var(--shadow); }
+    li .place { width: 1.6em; text-align: center; font-weight: 700; color: var(--muted); }
+    li.top .place { color: var(--gold); }
+    li .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+    li .value { font-variant-numeric: tabular-nums; font-weight: 700; }
+    .note { color: var(--muted); font-size: .7em; text-shadow: var(--shadow); }
+  </style>
+</head>
+<body>
+  <h1 id="title" aria-live="polite"></h1>
+  <ol id="list"></ol>
+  <p class="note" id="note" hidden></p>
+  <script src="board-obs.js"></script>
+</body>
+</html>

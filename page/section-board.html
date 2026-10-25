@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ext-sdk.js"></script>
+  <style>
+    .tools { display: flex; gap: var(--sp-2); flex-wrap: wrap; align-items: center; margin: var(--sp-3) 0; }
+    .entry { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--line); }
+    .entry.top { font-size: var(--fs-lg); }
+    .place { width: var(--control-h); text-align: center; font-weight: 700; color: var(--muted); }
+    .value { font-variant-numeric: tabular-nums; font-weight: 650; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    /* Stream-Ansicht: ohne Bedienelemente, große Schrift – zum Abfilmen mit OBS (Fenster- oder Bildschirmaufnahme) */
+    body.stream .tools, body.stream #lb-sub { display: none; }
+    body.stream #lb-list { background: transparent; border: 0; box-shadow: none; }
+    .entry.big { font-size: var(--fs-2xl); padding: var(--sp-3) var(--sp-4); }
+    .entry.big.top { font-size: var(--fs-3xl); }
+    .obs-card { margin-bottom: var(--sp-4); }
+    /* 1.5: Suche, Profilkarte, Abzeichen, Verlauf, Reiter „Webseite“ */
+    .entry-name { border: 0; background: none; color: inherit; font: inherit; font-weight: 700; text-align: left; padding: 0; min-height: 24px; cursor: pointer; }
+    .entry-name:hover, .entry-name:focus-visible { color: var(--accent-text); text-decoration: underline; }
+    .search { min-width: 180px; max-width: 240px; }
+    .profile { margin-top: var(--sp-3); }
+    .kvs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--sp-2); }
+    .kv { display: flex; flex-direction: column; }
+    .badges { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+    .badge.lvl3 { background: var(--accent-soft); color: var(--accent-text); }
+    .spark { width: 100%; max-width: 420px; height: 64px; color: var(--accent); }
+    .site-row { gap: var(--sp-2); }
+    .site-metrics { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4); }
+    .site-color { width: 48px; height: var(--control-h); padding: 0; border: 1px solid var(--line); border-radius: var(--r-sm); background: none; }
+    body.section { padding: 0 var(--sp-4) var(--sp-3); }
+    body.section .tools { margin-top: var(--sp-2); }
+  </style>
+</head>
+<body class="section">
+  <!-- Abschnitt im Reiter „Spieler“ eines Minecraft-Servers (Hostwerk 3.2+): Bestenliste dieses Servers, Suche, Profil (seit 2.0 Teil von „Spieler“, page/board.js) -->
+  <div data-view="board">
+  <p class="muted" id="lb-sub"></p>
+    <div class="tools">
+    <div class="row-tight" id="lb-metrics" role="group">
+      <button type="button" class="btn sm primary" data-m="playMs" data-i18n="lb.metric.playMs">Playtime</button>
+      <button type="button" class="btn sm" data-m="sessions" data-i18n="lb.metric.sessions">Visits</button>
+      <button type="button" class="btn sm" data-m="mined" data-i18n="lb.metric.mined">Mined</button>
+      <button type="button" class="btn sm" data-m="deaths" data-i18n="lb.metric.deaths">Deaths</button>
+      <button type="button" class="btn sm" data-m="mobKills" data-i18n="lb.metric.mobKills">Mobs killed</button>
+      <button type="button" class="btn sm" data-m="playerKills" data-i18n="lb.metric.playerKills">Players killed</button>
+      <button type="button" class="btn sm" data-m="distanceKm" data-i18n="lb.metric.distanceKm">Distance</button>
+      <button type="button" class="btn sm" data-m="crafted" data-i18n="lb.metric.crafted">Crafted</button>
+    </div>
+    <div class="row-tight" id="lb-periods" role="group">
+      <button type="button" class="btn sm primary" data-d="0" data-i18n="lb.period.all">All time</button>
+      <button type="button" class="btn sm" data-d="30" data-i18n="lb.period.month">30 days</button>
+      <button type="button" class="btn sm" data-d="7" data-i18n="lb.period.week">7 days</button>
+    </div>
+    <input class="input search" id="lb-search" type="search" placeholder="Search player …" data-i18n-placeholder="lb.searchPlayer" aria-label="Search player">
+    <span id="lb-since"></span>
+  </div>
+  <div class="card card-pad" id="lb-list"><div class="hw-skeleton" style="height:120px"></div></div>
+  <div id="lb-profile"></div>
+  <p class="tiny muted"><button type="button" class="btn sm ghost" data-lb-open-page data-i18n="lb.openAll">All servers and stream view</button></p>
+  </div>
+  <script src="live.js"></script>
+  <script src="board-lib.js"></script>
+  <script src="board.js"></script>
+</body>
+</html>

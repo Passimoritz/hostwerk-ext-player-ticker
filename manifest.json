@@ -2,14 +2,14 @@
   "$schema": "https://raw.githubusercontent.com/Passimoritz/hostwerk-public/main/sdk/manifest.schema.json",
   "id": "player-ticker",
   "name": {
-    "de": "Spieler-Ticker",
-    "en": "Player Ticker"
+    "de": "Spieler",
+    "en": "Players"
   },
   "description": {
-    "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielersuche, Höchststand des Tages, Spielzeit-Rangliste und Kommen und Gehen – direkt im Reiter „Spieler“ jedes Minecraft-Servers, mit Stream-Ansicht für OBS und auf Wunsch als eigene Webseite in deinem Webserver.",
-    "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, player search, today’s peak, a playtime ranking and who joined or left – right in the “Players” tab of every Minecraft server, with a stream view for OBS and, if you like, as an own web page in your web server."
+    "de": "Wer gerade auf deinen Minecraft- und Spiele-Servern ist und wer am meisten spielt: Live-Liste mit Köpfen, TPS, Höchststand und Kommen und Gehen, dazu die Bestenliste mit Spielzeit, Abgebautem, Toden und mehr – gesamt, für Woche oder Monat, mit Profilkarte, Abzeichen und Verlauf. Direkt im Reiter „Spieler“ jedes Minecraft-Servers, als Stream-Ansicht für OBS und auf Wunsch als eigene Webseite in deinem Webserver.",
+    "en": "Who is on your Minecraft and game servers right now and who plays the most: a live list with heads, TPS, today’s peak and joins and leaves, plus the leaderboard with playtime, mined blocks, deaths and more – all time, for the week or month, with profile card, badges and history. Right in the “Players” tab of every Minecraft server, as a stream view for OBS and, if you like, as an own web page in your web server."
   },
-  "version": "1.6.0",
+  "version": "2.0.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
   "license": "MIT",
@@ -18,7 +18,10 @@
   "color": "#23964a",
   "category": "games",
   "hostwerk": ">=3.0.0",
-  "sdkVersion": "3.0",
+  "sdkVersion": "3.8",
+  "replaces": [
+    "player-leaderboard"
+  ],
   "permissions": [
     "read:services",
     "read:minecraft",
@@ -37,14 +40,14 @@
   },
   "page": {
     "title": {
-      "de": "Spieler-Ticker",
-      "en": "Player Ticker"
+      "de": "Spieler",
+      "en": "Players"
     },
     "icon": "users",
     "file": "page/index.html",
     "description": {
-      "de": "Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS, Spielersuche, Höchststand des Tages, Spielzeit-Rangliste und Kommen und Gehen – direkt im Reiter „Spieler“ jedes Minecraft-Servers, mit Stream-Ansicht für OBS und auf Wunsch als eigene Webseite in deinem Webserver.",
-      "en": "Who is on your Minecraft and game servers right now? Live list with heads, TPS, player search, today’s peak, a playtime ranking and who joined or left – right in the “Players” tab of every Minecraft server, with a stream view for OBS and, if you like, as an own web page in your web server."
+      "de": "Wer gerade spielt und wer am meisten spielt – über alle Minecraft- und Spiele-Server.",
+      "en": "Who is playing right now and who plays the most – across all Minecraft and game servers."
     },
     "nav": false,
     "tabs": [
@@ -63,6 +66,14 @@
           "en": "Joins and leaves"
         },
         "icon": "clock"
+      },
+      {
+        "id": "board",
+        "title": {
+          "de": "Bestenliste",
+          "en": "Leaderboard"
+        },
+        "icon": "trophy"
       },
       {
         "id": "stream",
@@ -84,8 +95,8 @@
   },
   "widget": {
     "title": {
-      "de": "Spieler online",
-      "en": "Players online"
+      "de": "Spieler",
+      "en": "Players"
     },
     "file": "widget/index.html",
     "size": "third"
@@ -167,6 +178,148 @@
         "en": "Share the stream view without sign-in (own address for OBS – shows player and server names)"
       },
       "default": false
+    },
+    {
+      "key": "boardMetric",
+      "type": "select",
+      "label": {
+        "de": "Bestenliste: Standard-Kennzahl",
+        "en": "Leaderboard: default metric"
+      },
+      "default": "playMs",
+      "options": [
+        {
+          "value": "playMs",
+          "label": {
+            "de": "Spielzeit",
+            "en": "Playtime"
+          }
+        },
+        {
+          "value": "sessions",
+          "label": {
+            "de": "Besuche",
+            "en": "Visits"
+          }
+        },
+        {
+          "value": "mined",
+          "label": {
+            "de": "Abgebaut",
+            "en": "Mined"
+          }
+        },
+        {
+          "value": "deaths",
+          "label": {
+            "de": "Tode",
+            "en": "Deaths"
+          }
+        },
+        {
+          "value": "mobKills",
+          "label": {
+            "de": "Monster besiegt",
+            "en": "Mobs killed"
+          }
+        },
+        {
+          "value": "playerKills",
+          "label": {
+            "de": "Spieler besiegt",
+            "en": "Players killed"
+          }
+        },
+        {
+          "value": "distanceKm",
+          "label": {
+            "de": "Strecke",
+            "en": "Distance"
+          }
+        },
+        {
+          "value": "crafted",
+          "label": {
+            "de": "Hergestellt",
+            "en": "Crafted"
+          }
+        }
+      ]
+    },
+    {
+      "key": "boardLimit",
+      "type": "select",
+      "label": {
+        "de": "Bestenliste: Plätze in der Liste",
+        "en": "Leaderboard: places in the list"
+      },
+      "default": 20,
+      "options": [
+        {
+          "value": 10,
+          "label": {
+            "de": "Top 10",
+            "en": "Top 10"
+          }
+        },
+        {
+          "value": 20,
+          "label": {
+            "de": "Top 20",
+            "en": "Top 20"
+          }
+        },
+        {
+          "value": 50,
+          "label": {
+            "de": "Top 50",
+            "en": "Top 50"
+          }
+        },
+        {
+          "value": 100,
+          "label": {
+            "de": "Top 100",
+            "en": "Top 100"
+          }
+        }
+      ]
+    },
+    {
+      "key": "boardPublic",
+      "type": "switch",
+      "label": {
+        "de": "Bestenliste ohne Anmeldung freigeben (eigene Adresse für OBS – zeigt Spielernamen und Werte)",
+        "en": "Share the leaderboard without login (own address for OBS – shows player names and values)"
+      },
+      "default": false
+    },
+    {
+      "key": "sectionLive",
+      "type": "switch",
+      "label": {
+        "de": "Im Reiter „Spieler“ eines Minecraft-Servers: „Gerade online“ zeigen",
+        "en": "In the “Players” tab of a Minecraft server: show “Online now”"
+      },
+      "default": true
+    },
+    {
+      "key": "sectionBoard",
+      "type": "switch",
+      "label": {
+        "de": "Im Reiter „Spieler“ eines Minecraft-Servers: Bestenliste zeigen",
+        "en": "In the “Players” tab of a Minecraft server: show the leaderboard"
+      },
+      "default": true
+    },
+    {
+      "key": "tileBoard",
+      "type": "switch",
+      "label": {
+        "de": "Kachel: die drei Ersten der Bestenliste zeigen",
+        "en": "Tile: show the top three of the leaderboard"
+      },
+      "default": true
     }
   ],
   "settingsTab": "extensions",
@@ -186,7 +339,20 @@
         "icon": "users",
         "on": "mc.players",
         "file": "page/section.html",
-        "height": 620
+        "height": 620,
+        "showIf": "sectionLive"
+      },
+      {
+        "id": "board",
+        "title": {
+          "de": "Bestenliste",
+          "en": "Leaderboard"
+        },
+        "icon": "trophy",
+        "on": "mc.players",
+        "file": "page/section-board.html",
+        "height": 820,
+        "showIf": "sectionBoard"
       }
     ]
   }

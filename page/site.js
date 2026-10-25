@@ -12,7 +12,9 @@
   const targetKey = (x) => `${x.web}|${x.vhost || ''}`;
 
   async function load() {
-    state = await Hostwerk.backend('GET', '/site');
+    const all = await Hostwerk.backend('GET', '/site');
+    // Nur die „Wer ist online?“-Seiten – die der Bestenliste zeigt page/board-site.js (Seiten ohne Art stammen von vor 2.0)
+    state = { ...all, list: (all.list || []).filter((p) => !p.kind || p.kind === 'online') };
     const list = await Hostwerk.get('/mc/servers').catch(() => []);
     const games = await Hostwerk.get('/games-players').catch(() => []);
     servers = [...(Array.isArray(list) ? list : []).map((s) => ({ id: s.id, name: s.name })), ...(Array.isArray(games) ? games : []).map((g) => ({ id: `game:${g.id}`, name: g.name || g.id }))];
@@ -63,7 +65,7 @@
 
   function read() {
     const [web, vhost] = $('s-target').value.split('|');
-    return { id: edit.id || undefined, web, vhost: vhost || null, sub: $('s-sub').value.trim(), interval: Number($('s-interval').value), on: $('s-on') ? $('s-on').checked : true,
+    return { id: edit.id || undefined, kind: 'online', web, vhost: vhost || null, sub: $('s-sub').value.trim(), interval: Number($('s-interval').value), on: $('s-on') ? $('s-on').checked : true,
       options: { title: $('s-title').value.trim(), server: $('s-server').value, showOffline: $('s-offline').checked, names: $('s-names').value, theme: $('s-theme').value, lang: $('s-lang').value, accent: $('s-accent').value, refresh: Number($('s-interval').value) } };
   }
   const err = (e) => Hostwerk.toast(e.message || String(e), { kind: 'error' });
@@ -90,6 +92,6 @@
   /** Aufruf von außen (Webserver → „Seiten von Erweiterungen“): ?action=site&target=<seiten-id> öffnet sie zum Bearbeiten. */
   window.TickerSite = {
     show: () => Live.guard(Hostwerk, '#site', load),
-    open: async (id) => { await Live.guard(Hostwerk, '#site', load); if (!state || !state.available) return; const p = id && state.list.find((x) => x.id === id); edit = p ? JSON.parse(JSON.stringify({ ...p, options: { ...state.defaults, ...(p.options || {}) } })) : (state.targets.length ? blank() : null); draw(); },
+    open: async (id) => { await Live.guard(Hostwerk, '#site', load); if (!state || !state.available) return; const p = id && state.list.find((x) => x.id === id); if (id && !p) return; /* Seite der Bestenliste – öffnet page/board-site.js */ edit = p ? JSON.parse(JSON.stringify({ ...p, options: { ...state.defaults, ...(p.options || {}) } })) : (state.targets.length ? blank() : null); draw(); },
   };
 }());
