@@ -9,6 +9,7 @@ const STATS_TTL = 60000; // ranking stats per server at most once a minute (not 
 let pinned = null;
 let tab = 'live';
 let settings = {};
+let firstCards = true; // Karten erscheinen nur beim ersten Zeichnen nacheinander
 let last = null; // previous state { serverId: [names] } for join/leave
 let events = [];
 const cache = new Map(); // server → { at, data }
@@ -97,10 +98,17 @@ async function load() {
   document.getElementById('sub').textContent = t('summary', { players: Hostwerk.fmt.number(online), servers: Hostwerk.fmt.number(servers.filter((s) => s.state === 'running').length), time: clock(Date.now()) });
   if (tab === 'stream') return drawStream(servers);
   if (tab === 'events') return drawEvents();
-  if (!servers.length) return Hostwerk.render('#list', html`<div class="card card-pad empty"><h3>${t('noServers')}</h3><p class="muted small">${t('noServersHint')}</p></div>`);
+  // Bewegung wie in Hostwerk (SDK 3.6): Hostwerks leerer Zustand, Karten erscheinen beim ersten Mal nacheinander –
+  // ältere Hostwerk-Versionen kennen ui.empty und hw-stagger nicht und zeigen es wie bisher
+  if (!servers.length) return Hostwerk.render('#list', Hostwerk.ui.empty ? html`<div class="card">${Hostwerk.ui.empty({ title: t('noServers'), text: t('noServersHint'), icon: Hostwerk.raw(USERS) })}</div>` : html`<div class="card card-pad empty"><h3>${t('noServers')}</h3><p class="muted small">${t('noServersHint')}</p></div>`);
+  const list = document.getElementById('list');
+  if (firstCards) list.classList.add('hw-stagger'); else list.classList.remove('hw-stagger');
   Hostwerk.render('#list', html`${servers.map((s) => card(s, stats[s.id], size))}`);
+  firstCards = false;
   return undefined;
 }
+
+const USERS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg>'; // Lucide „users-round“ (ISC)
 
 /** Stream view: only who is online, large text, transparent – for OBS window capture or the public view (/v/player-ticker/). */
 function drawStream(servers) {

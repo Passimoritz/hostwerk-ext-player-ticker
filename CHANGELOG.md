@@ -1,3 +1,7 @@
+## 1.6.0
+
+- Hostwerk’s animations (SDK 3.6): the server cards rise one after another the first time, and without servers the page shows Hostwerk’s empty state. / Hostwerks Animationen (SDK 3.6): Die Server-Karten erscheinen beim ersten Mal nacheinander, ohne Server zeigt die Seite Hostwerks leeren Zustand.
+
 ## 1.5.3
 
 - New animated icon and banner in the common Hostwerk style (isometric block). / Neues animiertes Symbol und Banner im gemeinsamen Hostwerk-Stil (isometrischer Block).
