@@ -2,7 +2,7 @@
 
 # Player Ticker
 
-**English** · [Deutsch](README.de.md)
+[Deutsch](README.de.md) · An official [Hostwerk](https://github.com/Passimoritz/hostwerk-public) extension (runs sandboxed, Hostwerk 3.0 or newer)
 
 Who is on your Minecraft and game servers right now? A live list with player heads, TPS and a playtime ranking – great for streams and Discord screens. Includes a dashboard tile.
 
@@ -10,7 +10,7 @@ Who is on your Minecraft and game servers right now? A live list with player hea
 |---|---|
 | ![dark](docs/player-ticker-en-dark.png) | ![light](docs/player-ticker-en-light.png) |
 
-## Features
+## What it does
 
 - **Where:** Minecraft server → Players (section) and the dashboard tile – no own sidebar entry since 1.5.1; the full page stays under Extensions → Open
 - **Right where you need it:** a section in the “Players” tab of every Minecraft server (Hostwerk with SDK 3.2) – who is on that server, today’s peak and the latest joins and leaves, without its own tab
@@ -45,8 +45,10 @@ Or manually: download `player-ticker-<version>.zip` from the [latest release](..
 
 The page runs sandboxed in Hostwerk – no access to logins, settings or files.
 
-## Build your own
+## Develop
 
 This repository is also an example for the [Hostwerk extension SDK](https://github.com/Passimoritz/hostwerk-public/blob/main/sdk/README.md): design kit, translations, settings, storage, events, check and releases.
 
-License: MIT
+## License
+
+MIT

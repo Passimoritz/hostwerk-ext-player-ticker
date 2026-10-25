@@ -4,11 +4,13 @@
 
 [English](README.md) · **Deutsch**
 
+Offizielle [Hostwerk](https://github.com/Passimoritz/hostwerk-public)-Erweiterung (läuft abgeschottet, ab Hostwerk 3.0)
+
 Wer ist gerade auf deinen Minecraft- und Spiele-Servern? Live-Liste mit Köpfen, TPS und Spielzeit-Rangliste – schön für Streams und Discord-Bildschirme. Mit Kachel für die Übersicht.
 
 ![Ansicht](docs/player-ticker-de-dark.png)
 
-## Funktionen
+## Was sie kann
 
 - **Wo:** Minecraft-Server → Spieler (Abschnitt) und Übersichtskachel – seit 1.5.1 ohne eigenen Seitenleisten-Eintrag; die ganze Seite bleibt unter Erweiterungen → Öffnen
 - **Gleich dort, wo man ihn braucht:** Abschnitt im Reiter „Spieler“ jedes Minecraft-Servers (Hostwerk mit SDK 3.2) – wer auf diesem Server ist, Höchststand heute und das letzte Kommen und Gehen, ohne eigenen Reiter
@@ -43,8 +45,10 @@ Oder von Hand: `player-ticker-<version>.zip` aus dem [neuesten Release](../../re
 
 Die Seite läuft in Hostwerk abgeschottet – kein Zugriff auf Anmeldungen, Einstellungen oder Dateien.
 
-## Selbst bauen
+## Entwickeln
 
 Dieses Repository ist auch ein Beispiel für das [Hostwerk-Erweiterungs-SDK](https://github.com/Passimoritz/hostwerk-public/blob/main/sdk/README.de.md): Design-Baukasten, Übersetzungen, Einstellungen, Speicher, Ereignisse, Prüfung und Releases.
 
-Lizenz: MIT
+## Lizenz
+
+MIT
