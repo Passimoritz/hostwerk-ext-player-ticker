@@ -13,6 +13,13 @@ const MAX_BYTES = 40 * 1024;
 const MAX_FIRST_MS = 12 * 3600000;
 
 const empty = () => ({ v: 1, servers: {}, online: {} });
+/**
+ * Spielernamen kommen ungeprüft aus der Steam-Abfrage (jeder Spieler wählt seinen Namen selbst): nur eigene Einträge
+ * lesen, damit „constructor“ & Co. nicht in Object.prototype greifen – „__proto__“ lässt sich gar nicht als normaler
+ * Schlüssel ablegen (würde den Prototyp ersetzen bzw. Object.prototype verändern) und wird übersprungen.
+ */
+const own = (o, k) => (o && Object.prototype.hasOwnProperty.call(o, k) ? o[k] : undefined);
+const safeKey = (k) => typeof k === 'string' && k !== '' && k !== '__proto__';
 
 /**
  * Eine Abfrage einrechnen. list = /games-players (nur laufende Server) bzw. source.games(): [{ id, name, game, players, seconds }]
@@ -22,15 +29,16 @@ function track(state, list, now = Date.now()) {
   const st = state && state.v === 1 ? JSON.parse(JSON.stringify(state)) : empty();
   const online = {};
   for (const g of Array.isArray(list) ? list : []) {
-    if (!g || !g.id) continue;
-    const sv = st.servers[g.id] || (st.servers[g.id] = { name: g.name || g.id, game: g.game || null, players: {} });
+    if (!g || !safeKey(String(g.id || ''))) continue;
+    const sv = own(st.servers, g.id) || (st.servers[g.id] = { name: g.name || g.id, game: g.game || null, players: {} });
     sv.name = g.name || sv.name; sv.game = g.game || sv.game;
-    const before = st.online[g.id] || {};
+    const before = own(st.online, g.id) || {};
     online[g.id] = {};
     for (const name of g.players || []) {
-      const secs = Math.max(0, Number((g.seconds || {})[name]) || 0);
-      const p = sv.players[name] || (sv.players[name] = { playMs: 0, sessions: 0, last: 0 });
-      const prev = before[name];
+      if (!safeKey(name)) continue;
+      const secs = Math.max(0, Number(own(g.seconds, name)) || 0);
+      const p = own(sv.players, name) || (sv.players[name] = { playMs: 0, sessions: 0, last: 0 });
+      const prev = own(before, name);
       let add;
       if (prev && now - prev.at < 5 * 60000 && secs >= prev.s) {
         // weiter verbunden: Zuwachs, höchstens die Zeit seit der letzten Abfrage (+ etwas Spiel)
@@ -56,7 +64,7 @@ function trim(st, max = MAX_BYTES) {
   all.sort((a, b) => a.p.playMs - b.p.playMs || a.p.last - b.p.last);
   for (const x of all) {
     if (JSON.stringify(st).length <= max) break;
-    if (st.online[x.id] && st.online[x.id][x.name]) continue; // wer gerade spielt, bleibt
+    if (own(own(st.online, x.id), x.name)) continue; // wer gerade spielt, bleibt
     delete st.servers[x.id].players[x.name];
   }
   return st;

@@ -22,6 +22,9 @@ const inSection = () => Hostwerk.embed === 'section';
 const sectionServer = () => (inSection() && Hostwerk.context && Hostwerk.context.kind === 'minecraft' ? Hostwerk.context.id : null);
 
 const head = (name, size = 52) => T.headUrl(name, { remote: !!settings.remoteHeads, size });
+// Name öffnet die Profilkarte in der Bestenliste (nur auf der Seite, wo es den Reiter gibt)
+const canProfile = () => !inSection() && !!window.Board && !!document.getElementById('lb-list');
+const who = (n) => (canProfile() ? html`<button type="button" class="player-link" data-player="${n}" title="${t('lb.profileOpen')}">${n}</button>` : n);
 const avatar = (name, size) => html`<img class="hw-avatar" src="${head(name, size)}" data-name="${name}" alt="" width="20" height="20">`;
 const bedrock = (name) => (T.isBedrock(name) ? html`<span class="badge" title="${t('bedrockTitle')}">${t('bedrock')}</span>` : '');
 const stateBadge = (s) => (s.kind === 'game'
@@ -42,7 +45,7 @@ async function statsOf(id) {
 function ranking(stats, size) {
   const top = T.topPlayers(stats, size);
   if (!top.length) return '';
-  return html`<ol class="ranking" aria-label="${t('rankingTitle')}">${top.map((p) => html`<li>${avatar(p.name)}<span class="grow">${p.name}</span><span class="muted small">${Hostwerk.fmt.duration(p.playMs)}</span></li>`)}</ol>`;
+  return html`<ol class="ranking" aria-label="${t('rankingTitle')}">${top.map((p) => html`<li>${avatar(p.name)}<span class="grow">${who(p.name)}</span><span class="muted small">${Hostwerk.fmt.duration(p.playMs)}</span></li>`)}</ol>`;
 }
 
 function card(s, stats, size) {
@@ -52,7 +55,7 @@ function card(s, stats, size) {
   return html`<div class="card card-pad ${isPinned ? 'pinned' : ''}">
     <div class="server-head"><span class="dot ${s.state === 'running' ? 'ok' : ''}"></span><b class="ellipsis">${s.name}</b>${stateBadge(s)}
       <button type="button" class="btn sm ghost pin" data-pin="${s.id}" aria-pressed="${isPinned ? 'true' : 'false'}" aria-label="${t(isPinned ? 'unpinName' : 'pinName', { name: s.name })}" title="${t(isPinned ? 'unpin' : 'pin')}">${isPinned ? '★' : '☆'}</button></div>
-    <div class="players">${players.length ? players.map((n) => html`<span class="pill">${avatar(n)}${n}${bedrock(n)}</span>`) : html`<span class="muted small">${t(query && (s.extra.players || []).length ? 'noMatch' : s.state === 'running' ? 'nobody' : 'offlineHint')}</span>`}</div>
+    <div class="players">${players.length ? players.map((n) => html`<span class="pill">${avatar(n)}${who(n)}${bedrock(n)}</span>`) : html`<span class="muted small">${t(query && (s.extra.players || []).length ? 'noMatch' : s.state === 'running' ? 'nobody' : 'offlineHint')}</span>`}</div>
     ${peak ? html`<div class="tiny muted">${t('peakToday', { n: Hostwerk.fmt.number(peak) })}</div>` : ''}
     ${size && s.state === 'running' ? ranking(stats, size) : ''}
   </div>`;
@@ -61,10 +64,12 @@ function card(s, stats, size) {
 function drawEvents(into = '#events', max = 30) {
   const names = new Map(allServers.map((s) => [s.id, s.name]));
   const only = sectionServer() || eventServer;
-  const list = T.filterEvents(events, { server: only, query });
+  // Die Suche steht nur im Reiter „Live“ (und im Abschnitt über beiden) – im Reiter „Kommen und Gehen“ ist sie nicht zu
+  // sehen und filtert deshalb auch nicht unbemerkt weiter
+  const list = T.filterEvents(events, { server: only, query: inSection() ? query : '' });
   const picker = !inSection() && allServers.length > 1 ? html`<div class="row-tight events-filter"><label class="label" for="ev-server">${t('eventsServer')}</label><select class="select" id="ev-server"><option value="">${t('allServers')}</option>${allServers.map((x) => html`<option value="${x.id}" ${x.id === eventServer ? Hostwerk.raw('selected') : ''}>${x.name}</option>`)}</select></div>` : '';
   Hostwerk.render(into, list.length
-    ? html`${picker}<ul class="events">${list.slice(0, max).map((e) => html`<li><span class="mono small muted">${clock(e.t)}</span>${avatar(e.name)}<b class="ellipsis">${e.name}</b><span class="small ${e.kind === 'join' ? 'c-ok' : 'muted'}">${t(e.kind === 'join' ? 'joined' : 'left')}</span><span class="tiny muted ellipsis">${names.get(e.server) || ''}</span></li>`)}</ul>`
+    ? html`${picker}<ul class="events">${list.slice(0, max).map((e) => html`<li><span class="mono small muted">${clock(e.t)}</span>${avatar(e.name)}<b class="ellipsis">${who(e.name)}</b><span class="small ${e.kind === 'join' ? 'c-ok' : 'muted'}">${t(e.kind === 'join' ? 'joined' : 'left')}</span><span class="tiny muted ellipsis">${names.get(e.server) || ''}</span></li>`)}</ul>`
     : html`${picker}<p class="muted small">${t('noEvents')}</p>`);
   const sel = document.getElementById('ev-server');
   if (sel) sel.onchange = () => { eventServer = sel.value; drawEvents(); };
@@ -140,6 +145,7 @@ function showTab(id) {
   for (const el of document.querySelectorAll('[data-tab]')) el.hidden = inSection() ? false : el.dataset.tab !== tab;
   document.body.classList.toggle('stream', tab === 'stream');
   document.body.classList.toggle('board', tab === 'board');
+  document.body.classList.toggle('site', tab === 'site'); // Webseite: keine Live-Zusammenfassung (blieb sonst bei „Lädt …“ stehen)
   if (window.Board) { if (tab === 'board') window.Board.show(); else window.Board.hide(); }
   if (tab === 'site') { if (window.TickerSite) window.TickerSite.show(); if (window.BoardSite) window.BoardSite.show(); return; }
   reload();
@@ -155,6 +161,8 @@ document.addEventListener('click', async (e) => {
   if (e.target.closest('[data-copy-board-url]')) { Hostwerk.copy(boardUrl()).catch(() => {}); return; }
   if (e.target.closest('[data-open-settings]')) { Hostwerk.settings.open().catch(() => {}); return; }
   if (e.target.closest('[data-open-page]')) { Hostwerk.navigate('/ext/player-ticker').catch(() => {}); return; }
+  const pl = e.target.closest('[data-player]');
+  if (pl && window.Board && window.Board.openPlayer) { window.Board.openPlayer(pl.dataset.player); Hostwerk.setTab('board').catch(() => {}); showTab('board'); return; }
   const b = e.target.closest('[data-pin]');
   if (b) { pinned = pinned === b.dataset.pin ? null : b.dataset.pin; try { await Hostwerk.storage.set('pinned', pinned); } catch (er) { Hostwerk.toast(er.message, { kind: 'error' }); } reload(); }
 });
@@ -182,6 +190,7 @@ Hostwerk.ready().then(async (info) => {
   const soon = Live.throttle(reload, 2000);
   Hostwerk.on('minecraft', (s) => { if (s && s.id) cache.delete(s.id); soon(); });
   Hostwerk.on('service', (s) => { if (s.kind === 'minecraft' || s.kind === 'game') soon(); });
-  Hostwerk.on('settings', () => { reload().then(schedule); });
-  Hostwerk.on('lang', reload);
+  // Einstellungen auch in den Reitern „Bestenliste“/„Webseite“ neu lesen (dort zeichnet load() nicht) – sonst bliebe der Takt alt
+  Hostwerk.on('settings', async () => { settings = await Hostwerk.settings.get().catch(() => settings); schedule(); reload(); });
+  Hostwerk.on('lang', () => (tab === 'site' ? showTab('site') : reload()));
 });

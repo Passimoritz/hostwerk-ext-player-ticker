@@ -21,7 +21,9 @@ test('Suche und Filter', () => {
 });
 
 test('Höchststand heute: steigt nur, neuer Tag fängt neu an, unverändert = dasselbe Objekt', () => {
-  const day1 = Date.UTC(2026, 9, 21, 12);
+  const day1 = new Date(2026, 9, 21, 12).getTime(); // Mittag Ortszeit
+  // Kurz nach Mitternacht Ortszeit ist schon der neue Tag (auch wenn es in UTC noch der alte ist)
+  assert.strictEqual(T.peaks(null, [], new Date(2026, 9, 22, 0, 30).getTime()).day, '2026-10-22');
   const sv = (n) => [{ id: 'a', extra: { players: Array.from({ length: n }, (_, i) => `p${i}`) } }];
   const p1 = T.peaks(null, sv(3), day1);
   assert.deepStrictEqual(p1, { day: '2026-10-21', max: { a: 3 } });

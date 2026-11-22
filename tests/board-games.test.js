@@ -118,3 +118,20 @@ test('2.0: takes over the data of the former “Player leaderboard” once (snap
   await takeOver(host, get, set);
   assert.strictEqual(store.snapshots[0].day, '2026-10-20');
 });
+
+test('Spiele-Server: Spielernamen wie „__proto__“ oder „constructor“ verändern keine Objekte im Prozess', () => {
+  const t0 = 1000 * MIN;
+  const list = (id, seconds) => [{ id, name: 'V', players: Object.keys(seconds), seconds }];
+  let st = G.track(G.empty(), list('v', { __proto__: null, constructor: 60, toString: 5, Ragnar: 10 }), t0);
+  st = G.track(st, [{ id: 'v', name: 'V', players: ['__proto__', 'constructor', 'Ragnar'], seconds: JSON.parse('{"__proto__":120,"constructor":120,"Ragnar":70}') }], t0 + MIN);
+  st = G.track(st, [{ id: '__proto__', name: 'x', players: ['a'], seconds: { a: 5 } }], t0 + 2 * MIN);
+  assert.strictEqual(({}).sessions, undefined, 'Object.prototype unverändert');
+  assert.strictEqual(({}).playMs, undefined);
+  assert.strictEqual(Object.sessions, undefined, 'Object selbst unverändert');
+  const v = st.servers.v.players;
+  assert.deepStrictEqual(Object.keys(v).sort(), ['Ragnar', 'constructor', 'toString']);
+  assert.strictEqual(v.constructor.sessions, 1);
+  assert.strictEqual(v.constructor.playMs, 120000, 'Name „constructor“ zählt wie jeder andere');
+  assert.strictEqual(Object.getPrototypeOf(st.servers), Object.prototype);
+  assert.ok(!Object.prototype.hasOwnProperty.call(st.servers, '__proto__'), 'Server-Kennung „__proto__“ übersprungen');
+});

@@ -124,7 +124,9 @@
    * (dann muss nichts gespeichert werden); ein neuer Tag fängt bei null an.
    */
   function peaks(prev, servers, now = Date.now()) {
-    const day = new Date(now).toISOString().slice(0, 10);
+    // Tag nach Ortszeit – „heute“ beginnt um Mitternacht beim Nutzer, nicht um 1 oder 2 Uhr (UTC)
+    const d = new Date(now);
+    const day = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const base = prev && prev.day === day ? prev : { day, max: {} };
     let changed = base !== prev;
     const max = { ...base.max };

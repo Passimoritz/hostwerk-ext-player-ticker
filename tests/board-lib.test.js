@@ -65,6 +65,17 @@ test('Schnappschüsse: einer je Tag, alte fallen raus, Zeitraum = Stand minus Sc
   assert.deepStrictEqual(B.period(p1, snaps, 0, NOW).players, p1, 'gesamt = unverändert');
   assert.deepStrictEqual(B.period(p1, [], 7, NOW).players, [], 'ohne Schnappschuss noch nichts');
 });
+test('Hinweis zum Zeitraum: erste Momentaufnahme plus 7/30 Tage', () => {
+  const D = 86400000;
+  const snaps = [{ day: B.dayKey(NOW - 3 * D), v: {} }, { day: B.dayKey(NOW), v: {} }];
+  const w = B.periodReady(snaps, 7, NOW);
+  assert.strictEqual(w.first, B.dayKey(NOW - 3 * D));
+  assert.strictEqual(w.full, B.dayKey(NOW + 4 * D));
+  assert.strictEqual(w.ready, false);
+  assert.strictEqual(B.periodReady([{ day: B.dayKey(NOW - 40 * D), v: {} }], 30, NOW).ready, true);
+  assert.strictEqual(B.periodReady([], 7, NOW).first, B.dayKey(NOW), 'ohne Momentaufnahme: ab heute');
+  assert.strictEqual(B.periodReady(snaps, 0, NOW).ready, true, 'Gesamt braucht keinen Hinweis');
+});
 test('Schnappschüsse passen in den Speicher', () => {
   const many = Array.from({ length: 300 }, (_, i) => ({ key: `u:${i}`, name: `p${i}`, playMs: i * 1000, sessions: i, last: i, world: { mined: i } }));
   let snaps = [];

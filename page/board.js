@@ -11,6 +11,7 @@
   const MEDAL = ['🥇', '🥈', '🥉'];
   const STATS_TTL = 30000; // Statistik je Server höchstens alle 30 s neu holen
   let metric = null; let server = ''; let days = 0; let query = ''; let profile = null; // profile = key des geöffneten Spielers
+  let wantName = null; // Name aus Live/Ereignissen: nach dem Laden dessen Profilkarte öffnen
   let active = false;
   const inSection = () => Hostwerk.embed === 'section';
   let lastMerged = [];
@@ -96,12 +97,21 @@
     const chosen = server ? B.merge({ [server]: all[server] }) : merged;
     const per = B.period(chosen, snaps, days);
     if ($('sub')) $('sub').textContent = t('summary', { n: Hostwerk.fmt.number(merged.length), week: Hostwerk.fmt.number(B.activeWeek(merged)) });
-    Hostwerk.render('#lb-since', days && per.since ? html`<span class="tiny muted">${t('since', { date: new Date(`${per.since}T12:00:00`).toLocaleDateString(Hostwerk.lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'long' }) })}</span>` : '');
+    const dateText = (day) => new Date(`${day}T12:00:00`).toLocaleDateString(Hostwerk.lang === 'de' ? 'de-DE' : 'en-US', { day: 'numeric', month: 'long' });
+    // 7/30 Tage: solange die erste Momentaufnahme jünger ist, sagen, ab wann der volle Zeitraum zählt
+    const ready = B.periodReady(snaps, days);
+    Hostwerk.render('#lb-since', days ? html`<span class="tiny muted">${per.since ? t('since', { date: dateText(per.since) }) : ''}${!ready.ready ? html`${per.since ? ' · ' : ''}${t('periodFrom', { first: dateText(ready.first), full: dateText(ready.full), n: days })}` : ''}</span>` : '');
     // Suche: Platz bleibt der aus der ganzen Liste (nicht neu durchgezählt)
     const ranked = B.search(B.rank(per.players, metric, query ? 1000 : limit), query).slice(0, limit);
     Hostwerk.render('#lb-list', ranked.length
       ? html`<div class="stack" role="list" aria-label="${t('metric.' + metric)}">${ranked.map((p) => html`<div role="listitem">${entry(p)}</div>`)}</div>`
       : html`<div class="empty"><h3>${t(query ? 'noMatch' : days ? 'noDataPeriod' : 'noData')}</h3>${days && !query ? html`<p class="muted small">${t('noDataPeriodHint')}</p>` : ''}</div>`);
+    if (wantName) {
+      const hit = lastMerged.find((x) => String(x.name).toLowerCase() === wantName);
+      wantName = null;
+      if (hit) { profile = hit.key; drawProfile(); const box = $('profile'); if (box && box.scrollIntoView) box.scrollIntoView({ block: 'nearest' }); const c = box && box.querySelector('[data-lb-profile-close]'); if (c) c.focus(); return; }
+      Hostwerk.toast(t('noProfile'), { kind: 'info' });
+    }
     drawProfile();
   }
   function drawProfile() {
@@ -122,12 +132,20 @@
     const d = e.target.closest('#lb-periods button[data-d]');
     if (d) { days = Number(d.dataset.d) || 0; reload(); }
   });
+  // Escape schließt die Profilkarte (wie Dialoge) – der Fokus geht zurück auf den Namen
+  document.addEventListener('keydown', (e) => {
+    if (!active || e.key !== 'Escape' || !profile || e.ctrlKey || e.metaKey || e.altKey) return;
+    const key = profile; profile = null; drawProfile();
+    reload().then(() => { const b = [...document.querySelectorAll('[data-lb-profile]')].find((x) => x.dataset.lbProfile === key); if (b) b.focus(); });
+  });
   if ($('server')) $('server').addEventListener('change', (e) => { server = e.target.value; reload(); });
   if ($('search')) $('search').addEventListener('input', Live.throttle((e) => { query = e.target.value; reload(); }, 300));
 
   /** Für die Seite: Reiter „Bestenliste“ zeigen bzw. ruhen lassen (der Ticker ruft das beim Reiterwechsel). */
   window.Board = {
     show() { active = true; return reload(); },
+    /** Live/Ereignisse: Profilkarte dieses Spielers öffnen (die Seite wechselt danach in den Reiter). */
+    openPlayer(name) { wantName = String(name || '').toLowerCase(); },
     hide() { active = false; },
   };
 

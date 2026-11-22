@@ -15,7 +15,7 @@ function options(raw, hostLang = 'de') {
   const metrics = (Array.isArray(o.metrics) ? o.metrics : [o.metrics]).filter((m) => B.METRICS.includes(m));
   return {
     title: String(o.title || '').trim().slice(0, 80),
-    metrics: metrics.length ? [...new Set(metrics)].slice(0, 4) : ['playMs'],
+    metrics: metrics.length ? [...new Set(metrics)] : ['playMs'], // alle anhakbaren Werte (früher still auf 4 gekürzt)
     limit: Math.max(3, Math.min(50, Math.round(Number(o.limit)) || 10)),
     days: [7, 30].includes(Number(o.days)) ? Number(o.days) : 0,
     server: typeof o.server === 'string' ? o.server.slice(0, 60) : '',

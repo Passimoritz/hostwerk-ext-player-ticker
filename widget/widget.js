@@ -40,7 +40,7 @@ Hostwerk.ready().then(() => {
     const gb = await Hostwerk.backend('GET', '/games-board').catch(() => null);
     if (gb && gb.stats) Object.assign(stats, gb.stats);
     const top = Leaderboard.rank(Leaderboard.merge(stats), metric, 3);
-    const val = (v) => (metric === 'playMs' ? Hostwerk.fmt.duration(v) : Hostwerk.fmt.number(v));
+    const val = (v) => (metric === 'playMs' ? Hostwerk.fmt.duration(v) : metric === 'distanceKm' ? t2('km', { n: Hostwerk.fmt.number(v) }) : Hostwerk.fmt.number(v));
     Hostwerk.render(box, top.length
       ? html`<div class="tiny muted">${t2('metric.' + metric)}</div>${top.map((p, i) => html`<div class="line"><span aria-hidden="true">${MEDAL[i]}</span><span class="sr">${t2('place', { n: i + 1 })}</span><b class="grow ellipsis">${p.name}</b><span class="muted small">${val(p.value)}</span></div>`)}`
       : '');

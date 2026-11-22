@@ -95,6 +95,17 @@
     });
     return { players: out, since: base.day };
   }
+  /**
+   * Ab wann gibt es volle 7/30-Tage-Werte? Erste Momentaufnahme (first) + days = full; ready = schon so weit.
+   * Ohne Momentaufnahme zählt heute als erste (sie entsteht beim ersten Laden). → { first, full, ready } (Tage als JJJJ-MM-TT)
+   */
+  function periodReady(snaps, days, now = Date.now()) {
+    if (!days) return { first: null, full: null, ready: true };
+    const list = (Array.isArray(snaps) ? snaps : []).filter((s) => s && s.day);
+    const first = list.length ? list.reduce((a, s) => (s.day < a ? s.day : a), list[0].day) : dayKey(now);
+    const full = dayKey(new Date(`${first}T12:00:00Z`).getTime() + days * DAY);
+    return { first, full, ready: full <= dayKey(now) };
+  }
   /** Größe in Bytes, wie Hostwerk.storage sie zählt (JSON) – zum Kürzen unter 256 KB. */
   const sizeOf = (x) => JSON.stringify(x).length;
   /** Älteste Schnappschüsse weglassen, bis die Liste unter max Bytes bleibt. */
@@ -155,5 +166,5 @@
     return n;
   }
 
-  return { isBedrock, METRICS: KEYS, merge, rank, activeWeek, snapshot, addSnapshot, period, fit, dayKey, uuidOf, board, badges, BADGES: BADGES.map((b) => b.id), history, search, publicName };
+  return { isBedrock, METRICS: KEYS, merge, rank, activeWeek, snapshot, addSnapshot, period, periodReady, fit, dayKey, uuidOf, board, badges, BADGES: BADGES.map((b) => b.id), history, search, publicName };
 }));

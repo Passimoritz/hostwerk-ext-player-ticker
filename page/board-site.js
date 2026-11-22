@@ -18,14 +18,18 @@
     // Nur die Seiten der Bestenliste – die „Wer ist online?“-Seiten zeigt page/site.js
     state = { ...all, list: (all.list || []).filter((p) => p.kind === 'board'), defaults: all.defaultsBoard || all.defaults };
     const list = await Hostwerk.get('/mc/servers').catch(() => []);
-    servers = (Array.isArray(list) ? list : []).map((s) => ({ id: s.id, name: s.name }));
+    // Spiele-Server wie im Reiter „Bestenliste“ (ohne die Erweiterung „Spiele-Server“ einfach keine)
+    const gb = await Hostwerk.backend('GET', '/games-board').catch(() => null);
+    const games = (gb && Array.isArray(gb.servers) ? gb.servers : []).map((s) => ({ id: s.id, name: s.game && s.game !== s.name ? `${s.name} · ${s.game}` : s.name }));
+    servers = [...(Array.isArray(list) ? list : []).map((s) => ({ id: s.id, name: s.name })), ...games];
     draw();
   }
 
   function draw() {
     if (!state) return;
-    if (!state.available) { Hostwerk.render('#lb-site', html`<div class="empty"><h3>${t('site.oldTitle')}</h3><p class="muted small">${t('site.oldText')}</p></div>`); return; }
-    if (!state.targets.length) { Hostwerk.render('#lb-site', html`<div class="empty"><h3>${t('site.noWebTitle')}</h3><p class="muted small">${t('site.noWebText')}</p><div class="empty-action"><button type="button" class="btn primary" data-nav="/web">${t('site.toWeb')}</button></div></div>`); return; }
+    // Ohne passendes Hostwerk bzw. ohne Webserver sagt das der Teil „Wer ist online?“ darüber schon – nicht zweimal
+    // (Seiten, die es noch gibt, bleiben sichtbar, damit man sie entfernen kann)
+    if (!state.available || (!state.targets.length && !state.list.length)) { Hostwerk.render('#lb-site', ''); return; }
     Hostwerk.render('#lb-site', html`
       <div class="stack">
         <div class="card"><div class="card-head"><h3>${t('site.pages')}</h3><div class="right"><button type="button" class="btn sm primary" data-new>${t('site.new')}</button></div></div>
@@ -86,6 +90,8 @@
     if (b.hasAttribute('data-cancel')) { edit = null; draw(); return; }
     if (b.dataset.publish) { try { await Hostwerk.backend('POST', `/site/${encodeURIComponent(b.dataset.publish)}/publish`); Hostwerk.toast(t('site.renewed'), { kind: 'success' }); await load(); } catch (e) { err(e); } return; }
     if (b.dataset.remove) {
+      // Entfernen löscht die Seite im Webserver – erst nach einem zweiten Klick („Wirklich entfernen?“)
+      if (b.dataset.armed !== '1') { b.dataset.armed = '1'; b.textContent = t('site.removeConfirm'); setTimeout(() => { if (b.isConnected) { b.dataset.armed = ''; b.textContent = t('site.remove'); } }, 4000); return; }
       try { await Hostwerk.backend('DELETE', `/site/${encodeURIComponent(b.dataset.remove)}`); edit = null; Hostwerk.toast(t('site.removed'), { kind: 'success' }); await load(); } catch (e) { err(e); }
       return;
     }

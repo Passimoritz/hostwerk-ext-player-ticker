@@ -67,6 +67,7 @@
   "site.accent": "Accent colour",
   "site.privacy": "The page is public for everyone who reaches the web server – it only shows server names, numbers and player names (as chosen above), no addresses or IDs.",
   "site.remove": "Remove page",
+  "site.removeConfirm": "Really remove?",
   "site.removed": "Page removed",
   "site.active": "Keep up to date",
   "site.save": "Save and write",
@@ -88,6 +89,7 @@
   "lb.title": "Player leaderboard",
   "lb.summary": "{n} players · {week} played in the last 7 days",
   "lb.allServers": "All servers",
+  "lb.serverPick": "Choose server",
   "lb.metric.playMs": "Playtime",
   "lb.metric.sessions": "Visits",
   "lb.metric.mined": "Mined",
@@ -160,6 +162,7 @@
   "lb.site.metrics": "Shown values",
   "lb.site.privacy": "The page is public for everyone who reaches the web server – it only shows names (as chosen above) and numbers, no addresses or IDs.",
   "lb.site.remove": "Remove page",
+  "lb.site.removeConfirm": "Really remove?",
   "lb.site.removed": "Page removed",
   "lb.site.active": "Keep up to date",
   "lb.site.save": "Save and write",
@@ -191,5 +194,7 @@
   "lb.badge.crafter.hint": "500, 5,000 or 50,000 items crafted",
   "lb.badge.survivor": "Survivor",
   "lb.badge.survivor.hint": "From 10 hours: 5, 20 or 100 hours per death",
-  "lb.tab.site": "Web page"
+  "lb.tab.site": "Web page",
+  "lb.periodFrom": "first snapshot on {first} – full {n} days from {full}",
+  "lb.noProfile": "There are no values for this player in the leaderboard yet."
 }

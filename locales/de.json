@@ -67,6 +67,7 @@
   "site.accent": "Akzentfarbe",
   "site.privacy": "Die Seite ist für alle lesbar, die den Webserver erreichen – sie zeigt nur Servernamen, Zahlen und Spielernamen (wie oben gewählt), keine Adressen oder IDs.",
   "site.remove": "Seite entfernen",
+  "site.removeConfirm": "Wirklich entfernen?",
   "site.removed": "Seite entfernt",
   "site.active": "Aktuell halten",
   "site.save": "Speichern und schreiben",
@@ -88,6 +89,7 @@
   "lb.title": "Spieler-Bestenliste",
   "lb.summary": "{n} Spieler · {week} in den letzten 7 Tagen da",
   "lb.allServers": "Alle Server",
+  "lb.serverPick": "Server wählen",
   "lb.metric.playMs": "Spielzeit",
   "lb.metric.sessions": "Besuche",
   "lb.metric.mined": "Abgebaut",
@@ -160,6 +162,7 @@
   "lb.site.metrics": "Gezeigte Werte",
   "lb.site.privacy": "Die Seite ist für alle lesbar, die den Webserver erreichen – sie zeigt nur Namen (wie oben gewählt) und Zahlen, keine Adressen oder IDs.",
   "lb.site.remove": "Seite entfernen",
+  "lb.site.removeConfirm": "Wirklich entfernen?",
   "lb.site.removed": "Seite entfernt",
   "lb.site.active": "Aktuell halten",
   "lb.site.save": "Speichern und schreiben",
@@ -191,5 +194,7 @@
   "lb.badge.crafter.hint": "500, 5.000 oder 50.000 Dinge hergestellt",
   "lb.badge.survivor": "Überlebenskünstler",
   "lb.badge.survivor.hint": "Ab 10 Stunden: 5, 20 oder 100 Stunden je Tod",
-  "lb.tab.site": "Webseite"
+  "lb.tab.site": "Webseite",
+  "lb.periodFrom": "erste Momentaufnahme am {first} – volle {n} Tage ab {full}",
+  "lb.noProfile": "Für diesen Spieler gibt es noch keine Werte in der Bestenliste."
 }

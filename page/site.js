@@ -80,6 +80,8 @@
     if (b.hasAttribute('data-cancel')) { edit = null; draw(); return; }
     if (b.dataset.publish) { try { await Hostwerk.backend('POST', `/site/${encodeURIComponent(b.dataset.publish)}/publish`); Hostwerk.toast(t('site.renewed'), { kind: 'success' }); await load(); } catch (e) { err(e); } return; }
     if (b.dataset.remove) {
+      // Entfernen löscht die Seite im Webserver – erst nach einem zweiten Klick („Wirklich entfernen?“)
+      if (b.dataset.armed !== '1') { b.dataset.armed = '1'; b.textContent = t('site.removeConfirm'); setTimeout(() => { if (b.isConnected) { b.dataset.armed = ''; b.textContent = t('site.remove'); } }, 4000); return; }
       try { await Hostwerk.backend('DELETE', `/site/${encodeURIComponent(b.dataset.remove)}`); edit = null; Hostwerk.toast(t('site.removed'), { kind: 'success' }); await load(); } catch (e) { err(e); }
       return;
     }
