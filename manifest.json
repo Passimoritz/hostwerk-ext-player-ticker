@@ -9,7 +9,7 @@
     "de": "Wer gerade auf deinen Minecraft- und Spiele-Servern ist und wer am meisten spielt: Live-Liste mit Köpfen, TPS, Höchststand und Kommen und Gehen, dazu die Bestenliste mit Spielzeit, Abgebautem, Toden und mehr – gesamt, für Woche oder Monat, mit Profilkarte, Abzeichen und Verlauf. Direkt im Reiter „Spieler“ jedes Minecraft-Servers, als Stream-Ansicht für OBS und auf Wunsch als eigene Webseite in deinem Webserver.",
     "en": "Who is on your Minecraft and game servers right now and who plays the most: a live list with heads, TPS, today’s peak and joins and leaves, plus the leaderboard with playtime, mined blocks, deaths and more – all time, for the week or month, with profile card, badges and history. Right in the “Players” tab of every Minecraft server, as a stream view for OBS and, if you like, as an own web page in your web server."
   },
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-player-ticker",
   "license": "MIT",

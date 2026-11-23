@@ -1,3 +1,9 @@
+## 2.1.0
+
+- Click a player’s name in “Live” or “Comings and goings” to open their profile card in the leaderboard; Escape closes the card. / Klick auf einen Spielernamen in „Live“ oder „Kommen und Gehen“ öffnet dessen Profilkarte in der Bestenliste; Escape schließt die Karte.
+- 7/30 days: a hint says from which day the full period counts; the leaderboard web page also offers game servers and all selected metrics (no longer cut to 4). / 7/30 Tage: ein Hinweis sagt, ab welchem Tag der volle Zeitraum zählt; die Bestenlisten-Webseite bietet auch Spiele-Server und alle gewählten Kennzahlen (nicht mehr still auf 4 gekürzt).
+- Fixes: removing a web page asks “Really remove?”, “Peak today” follows local time, settings changes apply in every tab, the search no longer filters “Comings and goings” invisibly, km unit in the tile, translated field labels, safe handling of odd player names from game servers. / Korrekturen: Entfernen einer Webseite fragt „Wirklich entfernen?“, „Höchststand heute“ nach Ortszeit, Einstellungen wirken in allen Reitern, die Suche filtert „Kommen und Gehen“ nicht mehr unsichtbar, km-Einheit in der Kachel, übersetzte Feldbeschriftungen, sicherer Umgang mit ungewöhnlichen Spielernamen von Spiele-Servern.
+
 ## 2.0.0
 
 - Now "Players": the former extension "Player leaderboard" lives here (SDK 3.8 `replaces`). Hostwerk installs this version for everyone who had the leaderboard, takes over its daily snapshots, game-server playtime, settings and published web pages and removes it. / Jetzt „Spieler“: Die frühere Erweiterung „Spieler-Bestenliste“ steckt hier (SDK 3.8 `replaces`). Hostwerk installiert diese Fassung für alle mit der Bestenliste, übernimmt Tages-Schnappschüsse, Spielzeit auf Spiele-Servern, Einstellungen und veröffentlichte Webseiten und entfernt sie.
